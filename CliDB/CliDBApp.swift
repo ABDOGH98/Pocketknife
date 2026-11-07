@@ -45,5 +45,9 @@ struct PocketknifeApp: App {
         .defaultSize(width: 1000, height: 720)
         .defaultPosition(.center)
         .restorationBehavior(.disabled)
+
+        Settings {
+            SettingsView()
+        }
     }
 }

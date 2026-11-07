@@ -43,7 +43,7 @@ struct PasswordsView: View {
                 ContentUnavailableView(
                     "No Login Selected",
                     systemImage: "key",
-                    description: Text("Choose a login from the list, or press ⌘N to add one.")
+                    description: Text("Pick a login from the list to see it. Double-click a login to copy its password, or press ⌘N to add one.")
                 )
             }
         }
@@ -76,6 +76,7 @@ struct PasswordsView: View {
     private func list(_ visible: [SavedPassword]) -> some View {
         List(visible, selection: $selectedID) { password in
             PasswordRow(password: password)
+                .help("Double-click to copy the password")
         }
         .contextMenu(forSelectionType: PersistentIdentifier.self) { ids in
             if let password = ids.first.flatMap(password(with:)) {
@@ -98,7 +99,7 @@ struct PasswordsView: View {
         .onDeleteCommand { pendingDelete = selectedPassword }
         .overlay { emptyState(isEmpty: visible.isEmpty) }
         .navigationTitle("Passwords")
-        .navigationSubtitle(Text("^[\(visible.count) login](inflect: true)"))
+        .navigationSubtitle(Text("\(visible.count) logins"))
         .navigationSplitViewColumnWidth(min: 240, ideal: 300, max: 420)
         .toolbar {
             HomeToolbarButton(action: onHome)
@@ -155,7 +156,7 @@ struct PasswordsView: View {
     private func copyPassword(_ password: SavedPassword) {
         let secret = password.password
         guard !secret.isEmpty else {
-            toaster.show("No password saved")
+            toaster.show("This login has no password yet. Click Edit to add one.", style: .warning)
             return
         }
         Clipboard.copySecret(secret)
@@ -200,7 +201,7 @@ private struct PasswordRow: View {
                             .accessibilityLabel("Favorite")
                     }
                 }
-                Text(password.username.isEmpty ? "No username" : password.username)
+                Text(password.username.isEmpty ? String(localized: "No username") : password.username)
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)

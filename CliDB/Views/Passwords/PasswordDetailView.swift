@@ -97,6 +97,7 @@ struct PasswordDetailView: View {
                         systemImage: password.isFavorite ? "star.fill" : "star"
                     )
                 }
+                .help(password.isFavorite ? "Remove from Favorites" : "Add to Favorites (favorites stay at the top)")
                 Button("Edit", systemImage: "pencil", action: onEdit)
                     .help("Edit Login")
             }
@@ -128,7 +129,7 @@ struct PasswordDetailView: View {
     }
 
     private func field<Value: View, Actions: View>(
-        _ label: String,
+        _ label: LocalizedStringKey,
         @ViewBuilder value: () -> Value,
         @ViewBuilder actions: () -> Actions
     ) -> some View {
@@ -142,7 +143,7 @@ struct PasswordDetailView: View {
         }
     }
 
-    private func copyButton(_ title: String, action: @escaping () -> Void) -> some View {
+    private func copyButton(_ title: LocalizedStringKey, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Image(systemName: "doc.on.doc")
         }

@@ -31,6 +31,9 @@ struct CodeTextView: NSViewRepresentable {
         textView.isAutomaticSpellingCorrectionEnabled = false
         textView.isContinuousSpellCheckingEnabled = false
         textView.textContainerInset = NSSize(width: 2, height: 6)
+        // Code reads left to right even when the app is in a right-to-left language.
+        textView.baseWritingDirection = .leftToRight
+        textView.alignment = .left
         textView.string = text
         context.coordinator.lastFindRequest = findRequest
         return scrollView

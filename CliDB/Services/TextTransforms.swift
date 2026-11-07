@@ -26,7 +26,7 @@ enum TextTransforms {
             _ = try JSONSerialization.jsonObject(with: data, options: [.fragmentsAllowed])
         } catch {
             let detail = (error as NSError).userInfo[NSDebugDescriptionErrorKey] as? String
-            throw TransformError(message: "Invalid JSON" + (detail.map { ": \($0)" } ?? "."))
+            throw TransformError(message: detail.map { String(localized: "Invalid JSON: \($0)") } ?? String(localized: "Invalid JSON."))
         }
     }
 
@@ -128,13 +128,13 @@ enum TextTransforms {
 
     private static func parseXML(_ input: String) throws -> XMLDocument {
         guard !input.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            throw TransformError(message: "Invalid XML: the document is empty.")
+            throw TransformError(message: String(localized: "Invalid XML: the document is empty."))
         }
         do {
             // Never fetch external entities or DTDs referenced by pasted XML.
             return try XMLDocument(xmlString: input, options: [.nodeLoadExternalEntitiesNever])
         } catch {
-            throw TransformError(message: "Invalid XML: \(error.localizedDescription)")
+            throw TransformError(message: String(localized: "Invalid XML: \(error.localizedDescription)"))
         }
     }
 
@@ -158,10 +158,10 @@ enum TextTransforms {
         if remainder != 0 { normalized += String(repeating: "=", count: 4 - remainder) }
 
         guard let data = Data(base64Encoded: normalized) else {
-            throw TransformError(message: "Invalid Base64: the input contains characters or padding that can’t be decoded.")
+            throw TransformError(message: String(localized: "Invalid Base64: the input contains characters or padding that can’t be decoded."))
         }
         guard let text = String(data: data, encoding: .utf8) else {
-            throw TransformError(message: "Decoded \(data.count) bytes, but they aren’t UTF-8 text.")
+            throw TransformError(message: String(localized: "Decoded \(data.count) bytes, but they aren’t UTF-8 text."))
         }
         return text
     }
@@ -177,21 +177,23 @@ enum TextTransforms {
 
         let parts = token.split(separator: ".", omittingEmptySubsequences: false).map(String.init)
         guard parts.count == 3 else {
-            throw TransformError(message: "Invalid JWT: expected 3 dot-separated parts, found \(parts.count).")
+            throw TransformError(message: String(localized: "Invalid JWT: expected 3 dot-separated parts, found \(parts.count)."))
         }
 
-        let header = try decodeJWTSegment(parts[0], name: "header")
-        let payload = try decodeJWTSegment(parts[1], name: "payload")
+        let header = try decodeJWTSegment(parts[0], name: String(localized: "header", comment: "Part of a JWT"))
+        let payload = try decodeJWTSegment(parts[1], name: String(localized: "payload", comment: "Part of a JWT"))
 
         var sections = [
-            "Header\n\(try formatJSON(header))",
-            "Payload\n\(try formatJSON(payload))",
+            String(localized: "Header") + "\n" + (try formatJSON(header)),
+            String(localized: "Payload") + "\n" + (try formatJSON(payload)),
         ]
         if let claims = jwtTimeClaims(payload: payload, now: now) {
-            sections.append("Time claims\n\(claims)")
+            sections.append(String(localized: "Time claims") + "\n" + claims)
         }
-        let signature = parts[2].isEmpty ? "(none — unsecured token)" : "\(parts[2])\n(not verified)"
-        sections.append("Signature\n\(signature)")
+        let signature = parts[2].isEmpty
+            ? String(localized: "(none — unsecured token)")
+            : parts[2] + "\n" + String(localized: "(not verified)")
+        sections.append(String(localized: "Signature") + "\n" + signature)
         return sections.joined(separator: "\n\n")
     }
 
@@ -200,12 +202,12 @@ enum TextTransforms {
         do {
             text = try decodeBase64(segment)
         } catch let error as TransformError {
-            throw TransformError(message: "Invalid JWT \(name): \(error.message)")
+            throw TransformError(message: String(localized: "Invalid JWT \(name): \(error.message)"))
         }
         do {
             try validateJSON(text)
         } catch {
-            throw TransformError(message: "Invalid JWT \(name): it isn’t valid JSON.")
+            throw TransformError(message: String(localized: "Invalid JWT \(name): it isn’t valid JSON."))
         }
         return text
     }
@@ -215,12 +217,19 @@ enum TextTransforms {
         guard let object = try? JSONSerialization.jsonObject(with: Data(payload.utf8)) as? [String: Any] else { return nil }
         let formatter = ISO8601DateFormatter()
         var lines: [String] = []
-        for (key, label) in [("iat", "Issued at"), ("nbf", "Not before"), ("exp", "Expires")] {
+        let claims = [
+            ("iat", String(localized: "Issued at")),
+            ("nbf", String(localized: "Not before")),
+            ("exp", String(localized: "Expires")),
+        ]
+        // Pad to the longest label so the dates line up in every language.
+        let width = claims.map(\.1.count).max() ?? 10
+        for (key, label) in claims {
             guard let seconds = (object[key] as? NSNumber)?.doubleValue else { continue }
             let date = Date(timeIntervalSince1970: seconds)
-            var line = "\(label.padding(toLength: 10, withPad: " ", startingAt: 0))  \(formatter.string(from: date))"
-            if key == "exp" { line += date < now ? "  (expired)" : "  (valid)" }
-            if key == "nbf", date > now { line += "  (not yet valid)" }
+            var line = "\(label.padding(toLength: width, withPad: " ", startingAt: 0))  \(formatter.string(from: date))"
+            if key == "exp" { line += "  " + (date < now ? String(localized: "(expired)") : String(localized: "(valid)")) }
+            if key == "nbf", date > now { line += "  " + String(localized: "(not yet valid)") }
             lines.append(line)
         }
         return lines.isEmpty ? nil : lines.joined(separator: "\n")

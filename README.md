@@ -47,7 +47,7 @@ The first time you open **CLI Commands** with an empty library, the app adds a f
 
 ### Home
 
-The main window opens on a home screen with three cards, one per section, each showing how many items it holds. Click a card or press **⌘1 / ⌘2 / ⌘3**. Press **⌘0**, or the Home button in the toolbar, to go back.
+The main window opens on a home screen with three cards, one per section, each showing how many items it holds and its keyboard shortcut. Click a card or press **⌘1 / ⌘2 / ⌘3**. Press **⌘0**, or the Home button in the toolbar, to go back. The 🌐 menu at the bottom changes the app's language (see [Languages](#languages)).
 
 ### 1. CLI Commands
 
@@ -90,7 +90,8 @@ Rules:
 
 A searchable list of saved logins, with favorites sorted to the top.
 
-- **Fields**: title, username, website, notes, password.
+- **Fields**: name, username, password, website, notes, favorite. Only a name and a password are required.
+- **Strength meter**: rates the password as you type (weak / fair / strong) and says how to make it stronger.
 - **The password is stored only in the macOS Keychain** (service `<bundle id>.passwords`), keyed by a UUID kept on the record. It is never written to the SwiftData database. Deleting a login removes its Keychain item too.
 - **Copy Password** (⌘↩) marks the clipboard entry as *concealed* (`org.nspasteboard.ConcealedType`) so clipboard managers skip it, and **clears the clipboard after 60 seconds** unless you've copied something else since then.
 - Show or hide the password, open the website (`https://` is added when you leave out the scheme), and copy the username.
@@ -111,6 +112,14 @@ Shared controls: Paste, Clear, Find in the input and output, **Use as Input** to
 
 ---
 
+### Languages
+
+Pocketknife is translated into 20 languages: English, Arabic, Chinese (Simplified and Traditional), Dutch, French, German, Hindi, Indonesian, Italian, Japanese, Korean, Polish, Portuguese (Brazil), Russian, Spanish, Swedish, Thai, Turkish and Vietnamese.
+
+It follows your Mac's language by default. To pick another, use the 🌐 menu on the home screen or **Settings (⌘,) → Language**; the app offers to restart in the new language. This writes the same per-app setting as **System Settings → General → Language & Region → Applications**. Shell commands and code stay left to right in Arabic.
+
+All text lives in `CliDB/Localizable.xcstrings`. Translations are a first pass and haven't been reviewed by native speakers yet; corrections are welcome.
+
 ## Keyboard shortcuts
 
 | Shortcut | Action |
@@ -124,6 +133,7 @@ Shared controls: Paste, Clear, Find in the input and output, **Use as Input** to
 | ⇧⌘F | Add the command to Favorites or remove it |
 | ⌘⌫ | Delete the selected command (asks first) |
 | ⌘F | Find in a utility's input or output |
+| ⌘, | Settings (language) |
 | ⌃⌘F | Full screen for the expanded output window |
 | Esc | Cancel an editor |
 
@@ -144,7 +154,8 @@ CliDB/
 │   ├── TextTransforms.swift    # JSON / XML / Base64 / JWT, pure functions
 │   ├── Keychain.swift          # Thin wrapper over SecItem* APIs
 │   ├── Clipboard.swift         # Plain and concealed, auto-clearing copies
-│   └── SampleData.swift        # Sample commands added on first launch
+│   ├── SampleData.swift        # Sample commands added on first launch
+│   └── AppLanguage.swift       # In-app language choice and relaunch
 └── Views/
     ├── ContentView.swift       # Section switching + Home toolbar button
     ├── HomeView.swift          # Home screen cards
@@ -153,7 +164,9 @@ CliDB/
     ├── Editor/                 # Command editor window, tag field, parameter values
     ├── Passwords/              # Password list, detail, editor
     ├── Utils/                  # Utilities + expanded output window
-    └── Components/             # Chip, FlowLayout, Toast, CodeTextView, HighlightedCommand
+    └── Components/             # Chip, FlowLayout, Toast, CodeTextView, HighlightedCommand,
+                                #   FormFooter, LanguagePicker (+ Settings window)
+CliDB/Localizable.xcstrings     # String Catalog with all 20 languages
 CliDBTests/                     # Unit tests (Swift Testing)
 ```
 
@@ -172,7 +185,7 @@ The editor and output windows are not restored on relaunch.
 - **SwiftData** stores `SavedCommand` and `SavedPassword` in the app's sandboxed container.
 - `SavedCommand` keeps the template, tags, notes, favorite flag, use count and last-used date, the values you last entered (`lastValues`), and the saved values for each parameter (`parameterValues`).
 - `SavedPassword` keeps everything except the password, which is read and written through the `Keychain` service by `keychainID`.
-- Small UI preferences (sort order, whether samples were added) live in `@AppStorage`.
+- Small UI preferences (sort order, whether samples were added) live in `@AppStorage`. The language choice is the app's `AppleLanguages` preference.
 
 ### Menus
 
@@ -200,7 +213,8 @@ The menu bar can't see the main window's state directly. Instead, each section p
 |---|---|
 | `TemplateParserTests.swift` | Placeholder syntax, defaults, choices, repeated parameters, invalid braces, rendering, punctuation cleanup |
 | `SavedCommandTests.swift` | Tag persistence and normalization, parameter values merged with inline choices |
-| `SavedPasswordTests.swift` | Website URL handling, search, password generator rules |
+| `SavedPasswordTests.swift` | Website URL handling, search, password generator rules, strength meter |
+| `AppLanguageTests.swift` | Reading the Mac's language from the sandbox, native language names |
 | `TextTransformsTests.swift` | JSON and XML format/minify and invalid input, Base64 round trips and invalid input, JWT decoding and invalid tokens |
 
 Run them with **⌘U** in Xcode or `xcodebuild … test` (see [Getting started](#getting-started)).
@@ -211,4 +225,4 @@ Run them with **⌘U** in Xcode or `xcodebuild … test` (see [Getting started](
 
 - Bundle ID: `com.miy33t.CliDB`
 - The app was renamed from CliDB to **Pocketknife**. The Xcode project, target, scheme, source folders and bundle ID keep the old name on purpose: the bundle ID locates the Keychain items and the SwiftData store, so changing it would orphan existing data.
-- Version: 0.1.0
+- Version: 0.2.0

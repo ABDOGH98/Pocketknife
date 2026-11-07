@@ -59,3 +59,45 @@ enum PasswordGenerator {
         return String(characters.shuffled())
     }
 }
+
+/// A rough, explainable rating shown while typing a password. It only looks at length and
+/// character variety; it's a nudge toward longer passwords, not a security guarantee.
+enum PasswordStrength: Int, Comparable {
+    case empty, weak, fair, strong
+
+    init(_ password: String) {
+        guard !password.isEmpty else { self = .empty; return }
+        let kinds = [
+            password.contains(where: \.isLowercase),
+            password.contains(where: \.isUppercase),
+            password.contains(where: \.isNumber),
+            password.contains { !$0.isLetter && !$0.isNumber },
+        ].filter { $0 }.count
+        switch (password.count, kinds) {
+        case (16..., 3...), (20..., 2...): self = .strong
+        case (12..., 2...), (16..., _): self = .fair
+        default: self = .weak
+        }
+    }
+
+    var title: String {
+        switch self {
+        case .empty: ""
+        case .weak: String(localized: "Weak")
+        case .fair: String(localized: "Fair")
+        case .strong: String(localized: "Strong")
+        }
+    }
+
+    /// What to do to make it stronger, in plain words.
+    var advice: String {
+        switch self {
+        case .empty: String(localized: "Type a password or click Generate.")
+        case .weak: String(localized: "Use at least 12 characters, or click Generate.")
+        case .fair: String(localized: "Good. 16+ characters with symbols would be stronger.")
+        case .strong: String(localized: "Looks good.")
+        }
+    }
+
+    static func < (lhs: Self, rhs: Self) -> Bool { lhs.rawValue < rhs.rawValue }
+}

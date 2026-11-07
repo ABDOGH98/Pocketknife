@@ -12,7 +12,7 @@ enum CommandSort: String, CaseIterable, Identifiable {
 
     var id: Self { self }
 
-    var title: String {
+    var title: LocalizedStringResource {
         switch self {
         case .recentlyUsed: "Recently Used"
         case .mostUsed: "Most Used"
@@ -103,6 +103,7 @@ struct CommandsView: View {
     private func commandList(_ visible: [SavedCommand]) -> some View {
         List(visible, selection: $selectedID) { command in
             CommandRow(command: command)
+                .help("Double-click to copy")
         }
         .contextMenu(forSelectionType: PersistentIdentifier.self) { ids in
             if let command = ids.first.flatMap(command(with:)) {
@@ -124,7 +125,7 @@ struct CommandsView: View {
         .onDeleteCommand { perform(.delete, on: selectedCommand) }
         .overlay { emptyListState(isEmpty: visible.isEmpty) }
         .navigationTitle(listTitle)
-        .navigationSubtitle(Text("^[\(visible.count) command](inflect: true)"))
+        .navigationSubtitle(Text("\(visible.count) commands"))
         .navigationSplitViewColumnWidth(min: 260, ideal: 300, max: 420)
         .toolbar {
             HomeToolbarButton(action: onHome)
@@ -157,7 +158,7 @@ struct CommandsView: View {
             ContentUnavailableView(
                 "No Command Selected",
                 systemImage: "terminal",
-                description: Text("Choose a command from the list, or press ⌘N to add one.")
+                description: Text("Pick a command from the list to fill it in and copy it. Double-click a command to copy it right away, or press ⌘N to add one.")
             )
         }
     }
@@ -180,7 +181,7 @@ struct CommandsView: View {
                 ContentUnavailableView(
                     "No Favorites",
                     systemImage: "star",
-                    description: Text("Press ⇧⌘F on a command to add it here.")
+                    description: Text("Click the star on a command, or press ⇧⌘F, to keep it here.")
                 )
             }
         }
@@ -190,8 +191,8 @@ struct CommandsView: View {
 
     private var listTitle: String {
         switch sidebarSelection ?? .all {
-        case .all: "All Commands"
-        case .favorites: "Favorites"
+        case .all: String(localized: "All Commands")
+        case .favorites: String(localized: "Favorites")
         case .tag(let tag): tag
         }
     }
@@ -251,10 +252,14 @@ struct CommandsView: View {
         command.lastUsed = .now
 
         let missing = resolved.missing
-        let message = missing.isEmpty
-            ? "Copied to Clipboard"
-            : "Copied — \(missing.map { "<\($0)>" }.joined(separator: ", ")) still empty"
-        toaster.show(message)
+        if missing.isEmpty {
+            toaster.show("Copied to Clipboard")
+        } else {
+            toaster.show(
+                "Copied, but \(missing.map { "<\($0)>" }.joined(separator: ", ")) is still empty",
+                style: .warning
+            )
+        }
     }
 
     private func delete(_ command: SavedCommand) {

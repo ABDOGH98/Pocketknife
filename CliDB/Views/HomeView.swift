@@ -23,7 +23,7 @@ struct HomeView: View {
                     subtitle: "Search, fill in and copy the commands you use often.",
                     systemImage: "terminal.fill",
                     tint: .blue,
-                    count: Text("^[\(commands.count) command](inflect: true)"),
+                    count: Text("\(commands.count) commands"),
                     shortcut: "1"
                 ) { onSelect(.commands) }
 
@@ -32,19 +32,28 @@ struct HomeView: View {
                     subtitle: "Usernames and passwords, kept in your Keychain.",
                     systemImage: "key.fill",
                     tint: .orange,
-                    count: Text("^[\(passwords.count) login](inflect: true)"),
+                    count: Text("\(passwords.count) logins"),
                     shortcut: "2"
                 ) { onSelect(.passwords) }
 
                 HomeCard(
                     title: "Utilities",
-                    subtitle: "Format JSON and XML, encode and decode Base64.",
+                    subtitle: "Format JSON and XML, convert Base64 and read JWTs.",
                     systemImage: "wrench.and.screwdriver.fill",
                     tint: .purple,
-                    count: Text("JSON · XML · Base64"),
+                    count: Text(verbatim: UtilityTool.allCases.map(\.title).joined(separator: " · ")),
                     shortcut: "3"
                 ) { onSelect(.utils) }
             }
+
+            HStack(spacing: 14) {
+                Text("Tip: press ⌘0 from anywhere to come back here.")
+                    .foregroundStyle(.tertiary)
+                Divider().frame(height: 14)
+                LanguagePicker(style: .menu)
+                    .foregroundStyle(.secondary)
+            }
+            .font(.callout)
         }
         .padding(32)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -53,8 +62,8 @@ struct HomeView: View {
 }
 
 private struct HomeCard: View {
-    let title: String
-    let subtitle: String
+    let title: LocalizedStringResource
+    let subtitle: LocalizedStringResource
     let systemImage: String
     let tint: Color
     let count: Text
@@ -66,11 +75,22 @@ private struct HomeCard: View {
     var body: some View {
         Button(action: action) {
             VStack(alignment: .leading, spacing: 14) {
-                Image(systemName: systemImage)
-                    .font(.system(size: 28, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .frame(width: 56, height: 56)
-                    .background(tint.gradient, in: RoundedRectangle(cornerRadius: 14))
+                HStack(alignment: .top) {
+                    Image(systemName: systemImage)
+                        .font(.system(size: 28, weight: .semibold))
+                        .foregroundStyle(.white)
+                        .frame(width: 56, height: 56)
+                        .background(tint.gradient, in: RoundedRectangle(cornerRadius: 14))
+                    Spacer()
+                    // Shown on the card so the shortcut is seen, not remembered from a tooltip.
+                    Text(verbatim: "⌘\(String(shortcut.character))")
+                        .font(.callout.monospaced().weight(.medium))
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 3)
+                        .background(.quaternary.opacity(0.6), in: RoundedRectangle(cornerRadius: 6))
+                        .accessibilityLabel(Text("Shortcut: Command \(String(shortcut.character))"))
+                }
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)
@@ -107,7 +127,7 @@ private struct HomeCard: View {
         .onHover { hovering in
             withAnimation(.snappy(duration: 0.2)) { isHovered = hovering }
         }
-        .help("\(title) (⌘\(String(shortcut.character)))")
-        .accessibilityHint(subtitle)
+        .help(Text(verbatim: "\(String(localized: title)) (⌘\(String(shortcut.character)))"))
+        .accessibilityHint(Text(subtitle))
     }
 }

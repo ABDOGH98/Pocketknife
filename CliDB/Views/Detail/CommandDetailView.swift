@@ -76,6 +76,8 @@ struct CommandDetailView: View {
                 .padding(14)
                 .background(Color(nsColor: .textBackgroundColor), in: RoundedRectangle(cornerRadius: 10))
                 .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(.separator))
+                // Shell commands read left to right even when the app is in Arabic.
+                .environment(\.layoutDirection, .leftToRight)
                 .accessibilityLabel("Command: \(resolved.rendered)")
 
             HStack(spacing: 12) {
@@ -90,7 +92,7 @@ struct CommandDetailView: View {
 
                 let missing = resolved.missing
                 if !missing.isEmpty {
-                    Label("Fill in \(missing.joined(separator: ", "))", systemImage: "exclamationmark.triangle.fill")
+                    Label("Fill in \(missing.joined(separator: ", ")) below", systemImage: "exclamationmark.triangle.fill")
                         .font(.callout)
                         .foregroundStyle(.orange)
                 }
@@ -100,8 +102,14 @@ struct CommandDetailView: View {
 
     private func parametersSection(_ parameters: [TemplateParameter]) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text("Parameters").font(.headline)
+            HStack(alignment: .firstTextBaseline) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Fill in the blanks").font(.headline)
+                    Text("What you type here goes into the highlighted parts of the command above, and is remembered for next time.")
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
                 Spacer()
                 Button("Reset to Defaults") { command.lastValues = [:] }
                     .buttonStyle(.link)
@@ -127,7 +135,6 @@ struct CommandDetailView: View {
 
     private var usageText: Text {
         guard let lastUsed = command.lastUsed else { return Text("Never used") }
-        let times = command.useCount == 1 ? "once" : "\(command.useCount) times"
-        return Text("Used \(times) · Last used \(lastUsed, format: .relative(presentation: .named))")
+        return Text("Used \(command.useCount) times · Last used \(lastUsed, format: .relative(presentation: .named))")
     }
 }

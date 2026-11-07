@@ -28,3 +28,12 @@ struct SavedPasswordTests {
         }
     }
 }
+
+@Test func passwordStrengthRatings() {
+    #expect(PasswordStrength("") == .empty)
+    #expect(PasswordStrength("abc123") == .weak)
+    #expect(PasswordStrength("abcdefgh1234") == .fair)
+    #expect(PasswordStrength("Abcdefgh1234!xyz") == .strong)
+    #expect(PasswordStrength("aaaaaaaaaaaaaaaaaaaa") == .fair)
+    #expect(PasswordStrength(PasswordGenerator.generate()) == .strong)
+}

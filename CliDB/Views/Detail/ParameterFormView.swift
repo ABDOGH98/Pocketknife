@@ -37,7 +37,7 @@ private struct ParameterField: View {
         let effective = current.isEmpty ? parameter.fallbackValue : current
 
         HStack(spacing: 6) {
-            TextField(parameter.name, text: value, prompt: Text(parameter.fallbackValue.isEmpty ? "Required" : parameter.fallbackValue))
+            TextField(parameter.name, text: value, prompt: parameter.fallbackValue.isEmpty ? Text("Type a value") : Text("Default: \(parameter.fallbackValue)"))
                 .labelsHidden()
                 .textFieldStyle(.roundedBorder)
                 .font(.system(.body, design: .monospaced))
@@ -56,16 +56,17 @@ private struct ParameterField: View {
                         }
                     }
                 } label: {
-                    Label(
-                        parameter.choices.count == 1 ? "1 value" : "\(parameter.choices.count) values",
-                        systemImage: "list.bullet"
-                    )
+                    Label {
+                        Text("\(parameter.choices.count) choices")
+                    } icon: {
+                        Image(systemName: "list.bullet")
+                    }
                 }
                 .menuStyle(.button)
                 .buttonStyle(.bordered)
                 .fixedSize()
-                .help("Choose a saved value for \(parameter.name)")
-                .accessibilityLabel("Saved values for \(parameter.name)")
+                .help("Pick a saved choice for \(parameter.name)")
+                .accessibilityLabel("Choices for \(parameter.name)")
             }
 
             if !current.isEmpty, !parameter.choices.contains(current) {
@@ -75,8 +76,8 @@ private struct ParameterField: View {
                     Image(systemName: "plus.circle")
                 }
                 .buttonStyle(.borderless)
-                .help("Save “\(current)” as a value for \(parameter.name)")
-                .accessibilityLabel("Save value")
+                .help("Save “\(current)” as a choice for \(parameter.name), so you can pick it next time")
+                .accessibilityLabel("Save as a choice")
             }
         }
     }

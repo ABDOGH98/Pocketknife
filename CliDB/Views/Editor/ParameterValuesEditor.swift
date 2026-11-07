@@ -10,13 +10,9 @@ struct ParameterValuesEditor: View {
     @State private var isExpanded = false
     @FocusState private var isFocused: Bool
 
-    private var summary: String {
+    private var summary: Text {
         let count = parameter.addingChoices(values).choices.count
-        switch count {
-        case 0: return "No values"
-        case 1: return "1 value"
-        default: return "\(count) values"
-        }
+        return count == 0 ? Text("No choices") : Text("\(count) choices")
     }
 
     var body: some View {
@@ -39,7 +35,7 @@ struct ParameterValuesEditor: View {
                 }
 
                 HStack {
-                    TextField("New value", text: $newValue, prompt: Text("Add a value"))
+                    TextField("New choice", text: $newValue, prompt: Text("Type a choice and press Return"))
                         .labelsHidden()
                         .textFieldStyle(.roundedBorder)
                         .font(.system(.body, design: .monospaced))
@@ -58,7 +54,7 @@ struct ParameterValuesEditor: View {
                 Text(parameter.name)
                     .font(.system(.body, design: .monospaced))
                 Spacer()
-                Text(summary)
+                summary
                     .font(.callout)
                     .foregroundStyle(.secondary)
             }

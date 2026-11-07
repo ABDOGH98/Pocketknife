@@ -44,23 +44,29 @@ struct CommandEditorView: View {
     private var hasChanges: Bool { draft != original }
 
     private var validationMessage: String? {
-        if draft.title.trimmingCharacters(in: .whitespaces).isEmpty { return "Add a title" }
-        if draft.template.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty { return "Add a command" }
+        if draft.title.trimmingCharacters(in: .whitespaces).isEmpty { return String(localized: "Give the command a name") }
+        if draft.template.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty { return String(localized: "Type the command itself") }
         return nil
     }
 
     var body: some View {
         VStack(spacing: 0) {
+            header
             Form {
                 Section {
-                    TextField("Title", text: $draft.title, prompt: Text("Kill process on port"))
+                    TextField("Name", text: $draft.title, prompt: Text("e.g. Kill process on port"))
                         .focused($focusedField, equals: .title)
+                        .onSubmit { focusedField = .template }
+                } header: {
+                    Text("Name")
+                } footer: {
+                    FormHint("A short description you’ll recognize when searching.")
                 }
 
                 templateSection
 
                 if !detectedParameters.isEmpty {
-                    Section("Parameter Values") {
+                    Section {
                         ForEach(detectedParameters) { parameter in
                             ParameterValuesEditor(
                                 parameter: parameter,
@@ -74,26 +80,50 @@ struct CommandEditorView: View {
                                 )
                             )
                         }
+                    } header: {
+                        Text("Choices (optional)")
+                    } footer: {
+                        FormHint("Saved choices appear in a menu next to each blank, so you can pick instead of typing.")
                     }
                 }
 
                 Section {
                     TagField(tags: $draft.tags, text: $draft.pendingTag, suggestions: existingTags)
                     Toggle("Favorite", isOn: $draft.isFavorite)
+                } header: {
+                    Text("Organize")
+                } footer: {
+                    FormHint("Tags group commands in the sidebar. Favorites get their own list.")
                 }
 
-                Section("Notes") {
+                Section {
                     TextEditor(text: $draft.notes)
-                        .frame(minHeight: 36)
+                        .frame(minHeight: 44)
                         .accessibilityLabel("Notes")
+                        .overlay(alignment: .topLeading) {
+                            if draft.notes.isEmpty {
+                                Text("When to use it, gotchas, links…")
+                                    .foregroundStyle(.tertiary)
+                                    .padding(.leading, 5)
+                                    .allowsHitTesting(false)
+                            }
+                        }
+                } header: {
+                    Text("Notes (optional)")
+                } footer: {
+                    FormHint("Markdown works: **bold**, `code` and links.")
                 }
             }
             .formStyle(.grouped)
 
-            Divider()
-            footer
+            FormFooter(
+                missing: validationMessage,
+                saveTitle: command == nil ? "Add Command" : "Save",
+                onCancel: cancel,
+                onSave: save
+            )
         }
-        .frame(minWidth: 420, idealWidth: 480, minHeight: 380, idealHeight: 540)
+        .frame(minWidth: 440, idealWidth: 500, minHeight: 420, idealHeight: 620)
         .navigationTitle(command == nil ? "New Command" : "Edit “\(original.title)”")
         .onAppear {
             load()
@@ -112,9 +142,20 @@ struct CommandEditorView: View {
             TextEditor(text: $draft.template, selection: $templateSelection)
                 .font(.system(.body, design: .monospaced))
                 .autocorrectionDisabled()
-                .frame(minHeight: 52)
+                .frame(minHeight: 60)
                 .focused($focusedField, equals: .template)
                 .accessibilityLabel("Command template")
+                // Shell commands read left to right even when the app is in Arabic.
+                .environment(\.layoutDirection, .leftToRight)
+                .overlay(alignment: .topLeading) {
+                    if draft.template.isEmpty {
+                        Text("e.g. lsof -ti :{{port:3000}} | xargs kill -9")
+                            .font(.system(.body, design: .monospaced))
+                            .foregroundStyle(.tertiary)
+                            .padding(.leading, 5)
+                            .allowsHitTesting(false)
+                    }
+                }
         } header: {
             HStack {
                 Text("Command")
@@ -122,11 +163,11 @@ struct CommandEditorView: View {
                 Button {
                     isInsertingParameter = true
                 } label: {
-                    Label("Insert Parameter", systemImage: "curlybraces")
+                    Label("Insert Blank…", systemImage: "curlybraces")
                 }
-                .buttonStyle(.borderless)
+                .buttonStyle(.bordered)
                 .controlSize(.small)
-                .help("Insert {{name}}, {{name:default}} or {{name|a,b,c}} at the cursor")
+                .help("Add a part you fill in each time, like a port or a branch name, at the cursor")
                 .popover(isPresented: $isInsertingParameter, arrowEdge: .bottom) {
                     InsertParameterView { snippet in
                         insert(snippet)
@@ -140,39 +181,49 @@ struct CommandEditorView: View {
                     Label("A placeholder isn’t closed. Check your {{ and }}.", systemImage: "exclamationmark.triangle.fill")
                         .foregroundStyle(.orange)
                 } else if !detectedParameters.isEmpty {
-                    HighlightedCommand(
-                        template: TemplateParser.normalizingPunctuation(draft.template),
-                        values: Dictionary(uniqueKeysWithValues: detectedParameters.map { ($0.name, $0.fallbackValue) })
-                    )
-                    .font(.system(.caption, design: .monospaced))
-                    .lineLimit(2)
-                    .accessibilityLabel("Preview")
-                } else {
-                    Text("Tip: use `{{name}}` for a value you fill in each time.")
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                        Text("Preview")
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.secondary)
+                        HighlightedCommand(
+                            template: TemplateParser.normalizingPunctuation(draft.template),
+                            values: Dictionary(uniqueKeysWithValues: detectedParameters.map { ($0.name, $0.fallbackValue) })
+                        )
+                        .font(.system(.caption, design: .monospaced))
+                        .lineLimit(2)
+                    }
+                    .accessibilityElement(children: .combine)
+                    let names = detectedParameters.map(\.name).joined(separator: ", ")
+                    Text("You’ll fill in \(names) each time you copy it.")
                         .foregroundStyle(.secondary)
+                } else {
+                    PlaceholderCheatSheet()
                 }
             }
             .font(.caption)
         }
     }
 
-    private var footer: some View {
-        HStack {
-            if let validationMessage {
-                Text(validationMessage)
+    private var header: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "terminal.fill")
+                .font(.title3)
+                .foregroundStyle(.white)
+                .frame(width: 36, height: 36)
+                .background(.blue.gradient, in: RoundedRectangle(cornerRadius: 9))
+            VStack(alignment: .leading, spacing: 1) {
+                Text(command == nil ? "New Command" : "Edit Command")
+                    .font(.headline)
+                Text(command == nil ? String(localized: "Save a command once, then fill in the blanks and copy it any time.") : original.title)
                     .font(.callout)
                     .foregroundStyle(.secondary)
+                    .lineLimit(1)
             }
             Spacer()
-            Button("Cancel", role: .cancel, action: cancel)
-                .keyboardShortcut(.cancelAction)
-            Button(command == nil ? "Add" : "Save", action: save)
-                .keyboardShortcut(.return, modifiers: .command)
-                .buttonStyle(.borderedProminent)
-                .disabled(validationMessage != nil)
-                .help("⌘↩")
         }
-        .padding(12)
+        .padding(.horizontal, 20)
+        .padding(.top, 18)
+        .padding(.bottom, 4)
     }
 
     // MARK: - Actions
@@ -274,12 +325,32 @@ private struct InsertParameterView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Insert Parameter").font(.headline)
-            Form {
-                TextField("Name", text: $name, prompt: Text("port"))
-                TextField("Default", text: $defaultValue, prompt: Text("Optional"))
-                TextField("Values", text: $choices, prompt: Text("Optional, comma-separated"))
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Insert a Blank").font(.headline)
+                Text("A part of the command you fill in each time you copy it.")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
             }
+            Form {
+                Section {
+                    TextField("Name", text: $name, prompt: Text("port"))
+                } footer: {
+                    Text("What you’re asked to fill in, like port or branch.")
+                }
+                Section {
+                    TextField("Default", text: $defaultValue, prompt: Text("Optional"))
+                } footer: {
+                    Text("Used when you leave the value empty.")
+                }
+                Section {
+                    TextField("Choices", text: $choices, prompt: Text("Optional, e.g. dev, staging, prod"))
+                } footer: {
+                    Text("Choices to pick from a menu, separated by commas.")
+                }
+            }
+            .formStyle(.grouped)
+            .scrollDisabled(true)
+            .fixedSize(horizontal: false, vertical: true)
             HStack {
                 Text(snippet)
                     .font(.system(.callout, design: .monospaced))
@@ -288,11 +359,41 @@ private struct InsertParameterView: View {
                     .truncationMode(.middle)
                 Spacer()
                 Button("Insert") { onInsert(snippet) }
+                    .buttonStyle(.borderedProminent)
                     .keyboardShortcut(.defaultAction)
                     .disabled(cleanedName.isEmpty)
             }
         }
         .padding(16)
-        .frame(width: 320)
+        .frame(width: 340)
+    }
+}
+
+/// Shown under an empty template so the placeholder syntax can be learned at a glance
+/// instead of remembered from the docs.
+private struct PlaceholderCheatSheet: View {
+    private let rows: [(syntax: String, meaning: LocalizedStringKey)] = [
+        ("{{port}}", "a value you type each time"),
+        ("{{port:3000}}", "with a default"),
+        ("{{env|dev,prod}}", "pick from a list"),
+    ]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text("Wrap the parts that change in double curly braces:")
+                .foregroundStyle(.secondary)
+            Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 2) {
+                ForEach(rows, id: \.syntax) { row in
+                    GridRow {
+                        Text(verbatim: row.syntax)
+                            .font(.system(.caption, design: .monospaced))
+                            .foregroundStyle(.primary)
+                        Text(row.meaning)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+        }
+        .accessibilityElement(children: .combine)
     }
 }

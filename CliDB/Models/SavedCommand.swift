@@ -42,7 +42,7 @@ final class SavedCommand {
     }
 
     func duplicate() -> SavedCommand {
-        let copy = SavedCommand(title: "\(title) Copy", template: template, notes: notes, tags: tags)
+        let copy = SavedCommand(title: String(localized: "\(title) Copy", comment: "Title of a duplicated command"), template: template, notes: notes, tags: tags)
         copy.parameterValues = parameterValues
         copy.lastValues = lastValues
         return copy
