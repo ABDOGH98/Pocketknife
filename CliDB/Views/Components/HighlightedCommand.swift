@@ -1,10 +1,11 @@
 import SwiftUI
 
-/// Shows a template with its placeholders filled in. Filled values are tinted and
-/// unfilled ones appear as orange `<name>`.
+/// Shows a template with its placeholders filled in. Filled values are tinted with the accent
+/// and unfilled ones appear as amber `<name>`.
 struct HighlightedCommand: View {
     let template: String
     let values: [String: String]
+    var accent: Color = Theme.mint
 
     var body: some View {
         Text(attributed)
@@ -20,12 +21,13 @@ struct HighlightedCommand: View {
                 let value = values[parameter.name] ?? ""
                 if value.isEmpty {
                     var missing = AttributedString("<\(parameter.name)>")
-                    missing.foregroundColor = .orange
+                    missing.foregroundColor = Theme.warning
+                    missing.backgroundColor = Theme.warning.opacity(0.14)
                     result += missing
                 } else {
                     var filled = AttributedString(value)
-                    filled.foregroundColor = .accentColor
-                    filled.backgroundColor = Color.accentColor.opacity(0.12)
+                    filled.foregroundColor = accent
+                    filled.backgroundColor = accent.opacity(0.14)
                     result += filled
                 }
             }

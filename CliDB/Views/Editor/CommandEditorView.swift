@@ -51,49 +51,81 @@ struct CommandEditorView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Form {
-                Section {
-                    TextField("Title", text: $draft.title, prompt: Text("Kill process on port"))
-                        .focused($focusedField, equals: .title)
-                }
-
-                templateSection
-
-                if !detectedParameters.isEmpty {
-                    Section("Parameter Values") {
-                        ForEach(detectedParameters) { parameter in
-                            ParameterValuesEditor(
-                                parameter: parameter,
-                                values: Binding(
-                                    get: { draft.parameterValues[parameter.name, default: []] },
-                                    set: { draft.parameterValues[parameter.name] = $0 }
-                                ),
-                                newValue: Binding(
-                                    get: { draft.pendingValues[parameter.name, default: ""] },
-                                    set: { draft.pendingValues[parameter.name] = $0 }
-                                )
-                            )
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    HStack(spacing: 14) {
+                        IconTile(systemImage: command == nil ? "plus" : "pencil", tint: Theme.mint, size: 42)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(command == nil ? "New Command" : "Edit Command")
+                                .font(.system(size: 18, weight: .bold))
+                            Text("Use {{name}} for the parts you fill in each time.")
+                                .font(.system(size: 12.5))
+                                .foregroundStyle(Theme.textSecondary)
                         }
                     }
-                }
 
-                Section {
-                    TagField(tags: $draft.tags, text: $draft.pendingTag, suggestions: existingTags)
-                    Toggle("Favorite", isOn: $draft.isFavorite)
-                }
+                    FieldBox(label: String(localized: "Title")) {
+                        TextField("Title", text: $draft.title, prompt: Text("Kill process on port"))
+                            .focused($focusedField, equals: .title)
+                    }
 
-                Section("Notes") {
-                    TextEditor(text: $draft.notes)
-                        .frame(minHeight: 36)
-                        .accessibilityLabel("Notes")
+                    templateSection
+
+                    if !detectedParameters.isEmpty {
+                        VStack(alignment: .leading, spacing: 12) {
+                            SectionHeader(title: String(localized: "Values to pick from"), systemImage: "list.bullet.rectangle")
+                            Text("Optional. Saved values show up as chips you can click when filling in the command.")
+                                .font(.system(size: 12))
+                                .foregroundStyle(Theme.textTertiary)
+                            ForEach(detectedParameters) { parameter in
+                                ParameterValuesEditor(
+                                    parameter: parameter,
+                                    values: Binding(
+                                        get: { draft.parameterValues[parameter.name, default: []] },
+                                        set: { draft.parameterValues[parameter.name] = $0 }
+                                    ),
+                                    newValue: Binding(
+                                        get: { draft.pendingValues[parameter.name, default: ""] },
+                                        set: { draft.pendingValues[parameter.name] = $0 }
+                                    )
+                                )
+                            }
+                        }
+                        .card(padding: 16)
+                        .transition(.opacity.combined(with: .offset(y: 6)))
+                    }
+
+                    VStack(alignment: .leading, spacing: 14) {
+                        TagField(tags: $draft.tags, text: $draft.pendingTag, suggestions: existingTags)
+                        Rectangle().fill(Theme.stroke).frame(height: 1)
+                        Toggle(isOn: $draft.isFavorite.animation(Theme.motion(.lively))) {
+                            Label("Favorite", systemImage: draft.isFavorite ? "star.fill" : "star")
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundStyle(draft.isFavorite ? Theme.gold : Theme.text)
+                                .contentTransition(.symbolEffect(.replace))
+                        }
+                        .toggleStyle(.switch)
+                    }
+                    .card(padding: 16)
+
+                    FieldBox(label: String(localized: "Notes"), hint: String(localized: "Optional · Markdown")) {
+                        TextField("Notes", text: $draft.notes, prompt: Text("What it does, when to use it"), axis: .vertical)
+                            .lineLimit(2...6)
+                            .padding(.vertical, 9)
+                    }
                 }
+                .padding(20)
+                .animation(Theme.motion(.ui), value: detectedParameters.isEmpty)
             }
-            .formStyle(.grouped)
+            .scrollContentBackground(.hidden)
 
-            Divider()
+            Rectangle().fill(Theme.stroke).frame(height: 1)
             footer
         }
-        .frame(minWidth: 420, idealWidth: 480, minHeight: 380, idealHeight: 540)
+        .background(Theme.canvas)
+        .environment(\.sectionAccent, Theme.mint)
+        .tint(Theme.mint)
+        .frame(minWidth: 460, idealWidth: 520, minHeight: 420, idealHeight: 620)
         .navigationTitle(command == nil ? "New Command" : "Edit “\(original.title)”")
         .onAppear {
             load()
@@ -108,24 +140,16 @@ struct CommandEditorView: View {
     }
 
     private var templateSection: some View {
-        Section {
-            TextEditor(text: $draft.template, selection: $templateSelection)
-                .font(.system(.body, design: .monospaced))
-                .autocorrectionDisabled()
-                .frame(minHeight: 52)
-                .focused($focusedField, equals: .template)
-                .accessibilityLabel("Command template")
-        } header: {
+        VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("Command")
+                FieldLabel(String(localized: "Command"))
                 Spacer()
                 Button {
                     isInsertingParameter = true
                 } label: {
                     Label("Insert Parameter", systemImage: "curlybraces")
                 }
-                .buttonStyle(.borderless)
-                .controlSize(.small)
+                .buttonStyle(PillButtonStyle(kind: .secondary, size: .small))
                 .help("Insert {{name}}, {{name:default}} or {{name|a,b,c}} at the cursor")
                 .popover(isPresented: $isInsertingParameter, arrowEdge: .bottom) {
                     InsertParameterView { snippet in
@@ -134,45 +158,71 @@ struct CommandEditorView: View {
                     }
                 }
             }
-        } footer: {
-            VStack(alignment: .leading, spacing: 4) {
+
+            TextEditor(text: $draft.template, selection: $templateSelection)
+                .font(.system(size: 13.5, design: .monospaced))
+                .autocorrectionDisabled()
+                .scrollContentBackground(.hidden)
+                .frame(minHeight: 64)
+                .padding(8)
+                .background(Theme.sunken, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        .strokeBorder(focusedField == .template ? Theme.mint.opacity(0.7) : Theme.stroke, lineWidth: focusedField == .template ? 1.5 : 1)
+                )
+                .focused($focusedField, equals: .template)
+                .environment(\.layoutDirection, .leftToRight)
+                .accessibilityLabel("Command template")
+
+            Group {
                 if TemplateParser.hasUnclosedPlaceholder(in: draft.template) {
                     Label("A placeholder isn’t closed. Check your {{ and }}.", systemImage: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(Theme.warning)
                 } else if !detectedParameters.isEmpty {
-                    HighlightedCommand(
-                        template: TemplateParser.normalizingPunctuation(draft.template),
-                        values: Dictionary(uniqueKeysWithValues: detectedParameters.map { ($0.name, $0.fallbackValue) })
-                    )
-                    .font(.system(.caption, design: .monospaced))
-                    .lineLimit(2)
-                    .accessibilityLabel("Preview")
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                        Text("Preview")
+                            .font(.system(size: 11, weight: .bold))
+                            .foregroundStyle(Theme.textTertiary)
+                        HighlightedCommand(
+                            template: TemplateParser.normalizingPunctuation(draft.template),
+                            values: Dictionary(uniqueKeysWithValues: detectedParameters.map { ($0.name, $0.fallbackValue) })
+                        )
+                        .font(.system(size: 12, design: .monospaced))
+                        .lineLimit(2)
+                        .accessibilityLabel("Preview")
+                    }
                 } else {
-                    Text("Tip: use `{{name}}` for a value you fill in each time.")
-                        .foregroundStyle(.secondary)
+                    Label("Tip: write {{name}} for a value you fill in each time, or use Insert Parameter.", systemImage: "lightbulb.fill")
+                        .foregroundStyle(Theme.textTertiary)
                 }
             }
-            .font(.caption)
+            .font(.system(size: 12))
         }
     }
 
     private var footer: some View {
-        HStack {
+        HStack(spacing: 10) {
             if let validationMessage {
-                Text(validationMessage)
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
+                Label(validationMessage, systemImage: "info.circle")
+                    .font(.system(size: 12.5))
+                    .foregroundStyle(Theme.textSecondary)
             }
             Spacer()
             Button("Cancel", role: .cancel, action: cancel)
                 .keyboardShortcut(.cancelAction)
-            Button(command == nil ? "Add" : "Save", action: save)
-                .keyboardShortcut(.return, modifiers: .command)
-                .buttonStyle(.borderedProminent)
-                .disabled(validationMessage != nil)
-                .help("⌘↩")
+                .buttonStyle(PillButtonStyle(kind: .ghost))
+            Button(action: save) {
+                HStack(spacing: 8) {
+                    Text(command == nil ? "Add Command" : "Save")
+                    KeyHint(keys: "⌘↩", onAccent: true)
+                }
+            }
+            .keyboardShortcut(.return, modifiers: .command)
+            .buttonStyle(PillButtonStyle(kind: .primary))
+            .disabled(validationMessage != nil)
         }
-        .padding(12)
+        .padding(16)
+        .background(Theme.surface)
     }
 
     // MARK: - Actions
@@ -274,25 +324,36 @@ private struct InsertParameterView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Insert Parameter").font(.headline)
-            Form {
+            Text("Insert Parameter")
+                .font(.system(size: 15, weight: .bold))
+            FieldBox(label: String(localized: "Name")) {
                 TextField("Name", text: $name, prompt: Text("port"))
-                TextField("Default", text: $defaultValue, prompt: Text("Optional"))
-                TextField("Values", text: $choices, prompt: Text("Optional, comma-separated"))
             }
-            HStack {
-                Text(snippet)
-                    .font(.system(.callout, design: .monospaced))
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
-                    .truncationMode(.middle)
-                Spacer()
-                Button("Insert") { onInsert(snippet) }
-                    .keyboardShortcut(.defaultAction)
-                    .disabled(cleanedName.isEmpty)
+            FieldBox(label: String(localized: "Default"), hint: String(localized: "Optional")) {
+                TextField("Default", text: $defaultValue, prompt: Text("3000"))
             }
+            FieldBox(label: String(localized: "Values"), hint: String(localized: "Optional, comma-separated")) {
+                TextField("Values", text: $choices, prompt: Text("3000, 8080"))
+            }
+            Text(snippet)
+                .font(.system(size: 12.5, design: .monospaced))
+                .foregroundStyle(Theme.mint)
+                .lineLimit(1)
+                .truncationMode(.middle)
+                .padding(10)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Theme.sunken, in: RoundedRectangle(cornerRadius: 9))
+            Button {
+                onInsert(snippet)
+            } label: {
+                Label("Insert", systemImage: "arrow.down.to.line")
+            }
+            .buttonStyle(PillButtonStyle(kind: .primary, fullWidth: true))
+            .keyboardShortcut(.defaultAction)
+            .disabled(cleanedName.isEmpty)
         }
         .padding(16)
         .frame(width: 320)
+        .environment(\.sectionAccent, Theme.mint)
     }
 }

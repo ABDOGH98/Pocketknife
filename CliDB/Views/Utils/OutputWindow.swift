@@ -17,7 +17,10 @@ struct OutputWindow: View {
 
     var body: some View {
         CodeTextView(text: .constant(output.text), isEditable: false, findRequest: findRequest)
-            .padding(.horizontal, 8)
+            .padding(10)
+            .background(Theme.sunken, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(Theme.stroke))
+            .padding(12)
             .frame(minWidth: 500, minHeight: 300)
             .navigationTitle(output.title)
             .toolbar {
@@ -26,7 +29,7 @@ struct OutputWindow: View {
                         .help("Search the output (⌘F)")
                     Button("Copy", systemImage: "doc.on.doc") {
                         Clipboard.copy(output.text)
-                        toaster.show("Copied output")
+                        toaster.show(String(localized: "Copied output"))
                     }
                     .help("Copy the output")
                     Button("Full Screen", systemImage: "arrow.up.left.and.arrow.down.right") {

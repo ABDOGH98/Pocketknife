@@ -18,9 +18,11 @@ struct PocketknifeApp: App {
     var body: some Scene {
         Window("Pocketknife", id: "main") {
             ContentView()
-                .frame(minWidth: 860, minHeight: 500)
+                .frame(minWidth: 900, minHeight: 560)
+                .containerBackground(Theme.canvas, for: .window)
         }
-        .defaultSize(width: 1100, height: 680)
+        .windowStyle(.hiddenTitleBar)
+        .defaultSize(width: 1180, height: 740)
         .commands { CommandMenuCommands() }
         .modelContainer(container)
         .environment(editorEvents)
@@ -28,6 +30,7 @@ struct PocketknifeApp: App {
         WindowGroup("Command", id: EditorTarget.windowID, for: EditorTarget.self) { $target in
             if let target {
                 CommandEditorWindow(target: target)
+                    .containerBackground(Theme.canvas, for: .window)
             }
         }
         .defaultSize(width: 480, height: 540)
@@ -40,6 +43,7 @@ struct PocketknifeApp: App {
         WindowGroup("Output", id: ExpandedOutput.windowID, for: ExpandedOutput.self) { $output in
             if let output {
                 OutputWindow(output: output)
+                    .containerBackground(Theme.canvas, for: .window)
             }
         }
         .defaultSize(width: 1000, height: 720)

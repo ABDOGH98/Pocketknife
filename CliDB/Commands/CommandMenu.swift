@@ -26,6 +26,12 @@ struct CommandMenuCommands: Commands {
     @FocusedValue(\.sectionNavigation) private var navigation
 
     var body: some Commands {
+        CommandGroup(replacing: .appSettings) {
+            Button("Settings…") { navigation?.go(.settings) }
+                .keyboardShortcut(",")
+                .disabled(navigation == nil)
+        }
+
         CommandGroup(replacing: .newItem) {
             if let newPassword {
                 Button("New Password") { newPassword.perform() }

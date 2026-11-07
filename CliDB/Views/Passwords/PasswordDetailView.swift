@@ -5,149 +5,180 @@ struct PasswordDetailView: View {
     var onCopyUsername: () -> Void
     var onCopyPassword: () -> Void
     var onEdit: () -> Void
+    var onDelete: () -> Void
 
     @State private var isRevealed = false
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
+            VStack(alignment: .leading, spacing: 18) {
                 header
+                    .appearAnimation()
 
-                GroupBox {
-                    Grid(alignment: .leadingFirstTextBaseline, horizontalSpacing: 14, verticalSpacing: 14) {
-                        field("Username") {
-                            Text(password.username.isEmpty ? "—" : password.username)
+                VStack(spacing: 0) {
+                    FieldRow(label: String(localized: "Username"), systemImage: "person.fill") {
+                        Text(password.username.isEmpty ? String(localized: "No username") : password.username)
+                            .foregroundStyle(password.username.isEmpty ? Theme.textTertiary : Theme.text)
+                            .textSelection(.enabled)
+                    } actions: {
+                        CopyButton(size: .small, action: onCopyUsername)
+                            .disabled(password.username.isEmpty)
+                    }
+
+                    divider
+
+                    FieldRow(label: String(localized: "Password"), systemImage: "key.fill") {
+                        // Only read from the Keychain when shown; hidden it's a fixed-length mask.
+                        Text(isRevealed ? password.password : String(repeating: "•", count: 14))
+                            .font(.system(size: 14, weight: .medium, design: .monospaced))
+                            .foregroundStyle(Theme.text)
+                            .textSelection(.enabled)
+                            .contentTransition(.opacity)
+                    } actions: {
+                        Button {
+                            withAnimation(Theme.motion(.ui)) { isRevealed.toggle() }
+                        } label: {
+                            Label(isRevealed ? "Hide" : "Show", systemImage: isRevealed ? "eye.slash" : "eye")
+                                .contentTransition(.symbolEffect(.replace))
+                        }
+                        .buttonStyle(PillButtonStyle(kind: .ghost, size: .small))
+                        CopyButton(size: .small, action: onCopyPassword)
+                    }
+
+                    if let url = password.websiteURL {
+                        divider
+                        FieldRow(label: String(localized: "Website"), systemImage: "globe") {
+                            Text(password.website)
+                                .foregroundStyle(Theme.text)
                                 .textSelection(.enabled)
+                                .lineLimit(1)
                         } actions: {
-                            copyButton("Copy Username", action: onCopyUsername)
-                                .disabled(password.username.isEmpty)
-                        }
-
-                        Divider().gridCellUnsizedAxes(.horizontal)
-
-                        field("Password") {
-                            // Only read from the Keychain when shown; hidden it's a fixed-length mask.
-                            Text(isRevealed ? password.password : String(repeating: "•", count: 12))
-                                .font(.system(.body, design: .monospaced))
-                                .textSelection(.enabled)
-                        } actions: {
-                            Button {
-                                isRevealed.toggle()
-                            } label: {
-                                Image(systemName: isRevealed ? "eye.slash" : "eye")
+                            Link(destination: url) {
+                                Label("Open", systemImage: "arrow.up.right")
                             }
-                            .buttonStyle(.borderless)
-                            .help(isRevealed ? "Hide Password" : "Show Password")
-                            .accessibilityLabel(isRevealed ? "Hide Password" : "Show Password")
-                            copyButton("Copy Password", action: onCopyPassword)
-                        }
-
-                        if let url = password.websiteURL {
-                            Divider().gridCellUnsizedAxes(.horizontal)
-                            field("Website") {
-                                Link(password.website, destination: url)
-                            } actions: {
-                                EmptyView()
-                            }
+                            .buttonStyle(PillButtonStyle(kind: .ghost, size: .small))
                         }
                     }
-                    .padding(8)
                 }
+                .card(padding: 6)
+                .appearAnimation(index: 1)
 
-                HStack(spacing: 12) {
-                    Button(action: onCopyPassword) {
-                        Label("Copy Password", systemImage: "key")
-                            .padding(.horizontal, 4)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .controlSize(.large)
-                    .keyboardShortcut(.return, modifiers: .command)
-                    .help("Copy Password (⌘↩)")
-
-                    Button(action: onCopyUsername) {
-                        Label("Copy Username", systemImage: "person")
-                    }
-                    .controlSize(.large)
-                    .disabled(password.username.isEmpty)
+                HStack(spacing: 10) {
+                    CopyButton(
+                        title: String(localized: "Copy Password"),
+                        systemImage: "key.fill",
+                        kind: .primary,
+                        size: .large,
+                        shortcutHint: "⌘↩",
+                        shortcut: KeyboardShortcut(.return, modifiers: .command),
+                        action: onCopyPassword
+                    )
+                    CopyButton(title: String(localized: "Copy Username"), systemImage: "person.fill", size: .large, action: onCopyUsername)
+                        .disabled(password.username.isEmpty)
                 }
+                .appearAnimation(index: 2)
+
+                Label("Copied passwords are hidden from clipboard managers and cleared after a minute.", systemImage: "lock.shield.fill")
+                    .font(.system(size: 12))
+                    .foregroundStyle(Theme.textTertiary)
+                    .appearAnimation(index: 3)
 
                 if !password.notes.isEmpty {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Notes").font(.headline)
+                    VStack(alignment: .leading, spacing: 10) {
+                        SectionHeader(title: String(localized: "Notes"), systemImage: "text.alignleft")
                         Text(password.notes)
+                            .font(.system(size: 13))
+                            .foregroundStyle(Theme.textSecondary)
                             .textSelection(.enabled)
-                            .foregroundStyle(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
+                    .card()
+                    .appearAnimation(index: 4)
                 }
             }
-            .padding(28)
+            .padding(.horizontal, 28)
+            .padding(.top, 14)
+            .padding(.bottom, 28)
             .frame(maxWidth: 760, alignment: .leading)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .scrollContentBackground(.hidden)
         // Hide the password again when switching to another login.
         .onChange(of: password.keychainID) { isRevealed = false }
-        .toolbar {
-            ToolbarItemGroup {
-                Button {
-                    password.isFavorite.toggle()
-                } label: {
-                    Label(
-                        password.isFavorite ? "Remove from Favorites" : "Add to Favorites",
-                        systemImage: password.isFavorite ? "star.fill" : "star"
-                    )
-                }
-                Button("Edit", systemImage: "pencil", action: onEdit)
-                    .help("Edit Login")
-            }
-        }
+    }
+
+    private var divider: some View {
+        Rectangle().fill(Theme.stroke).frame(height: 1).padding(.horizontal, 12)
     }
 
     private var header: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(alignment: .firstTextBaseline, spacing: 8) {
+        HStack(alignment: .center, spacing: 16) {
+            IconTile(letter: password.initial, tint: Theme.swatch(for: password.title), size: 58)
+            VStack(alignment: .leading, spacing: 6) {
                 Text(password.title)
-                    .font(.title.weight(.semibold))
+                    .font(.system(size: 26, weight: .bold))
+                    .foregroundStyle(Theme.text)
                     .textSelection(.enabled)
-                if password.isFavorite {
-                    Image(systemName: "star.fill")
-                        .foregroundStyle(.yellow)
-                        .accessibilityLabel("Favorite")
+                    .fixedSize(horizontal: false, vertical: true)
+                Group {
+                    if let lastUsed = password.lastUsed {
+                        Text("Password copied \(lastUsed, format: .relative(presentation: .named))")
+                    } else {
+                        Text("Added \(password.createdAt, format: .dateTime.day().month().year())")
+                    }
                 }
+                .font(.system(size: 12.5, weight: .medium))
+                .foregroundStyle(Theme.textSecondary)
             }
-            Group {
-                if let lastUsed = password.lastUsed {
-                    Text("Password copied \(lastUsed, format: .relative(presentation: .named))")
-                } else {
-                    Text("Added \(password.createdAt, format: .dateTime.day().month().year())")
+            Spacer(minLength: 12)
+            HStack(spacing: 8) {
+                FavoriteButton(isFavorite: $password.isFavorite)
+                Button(action: onEdit) {
+                    Label("Edit", systemImage: "pencil")
                 }
+                .buttonStyle(PillButtonStyle(kind: .ghost))
+                Button(action: onDelete) {
+                    Label("Delete", systemImage: "trash")
+                }
+                .buttonStyle(PillButtonStyle(kind: .destructive))
+                .help("Delete this login (⌘⌫)")
             }
-            .font(.callout)
-            .foregroundStyle(.secondary)
+            .fixedSize()
         }
     }
+}
 
-    private func field<Value: View, Actions: View>(
-        _ label: String,
-        @ViewBuilder value: () -> Value,
-        @ViewBuilder actions: () -> Actions
-    ) -> some View {
-        GridRow {
-            Text(label)
-                .foregroundStyle(.secondary)
-                .gridColumnAlignment(.trailing)
-            value()
-                .frame(maxWidth: .infinity, alignment: .leading)
-            HStack(spacing: 8) { actions() }
-        }
-    }
+/// One field of a login: an icon, a label above the value, and its actions on the right.
+private struct FieldRow<Value: View, Actions: View>: View {
+    let label: String
+    let systemImage: String
+    @ViewBuilder var value: Value
+    @ViewBuilder var actions: Actions
 
-    private func copyButton(_ title: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Image(systemName: "doc.on.doc")
+    @Environment(\.sectionAccent) private var accent
+    @State private var isHovered = false
+
+    var body: some View {
+        HStack(spacing: 14) {
+            Image(systemName: systemImage)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(accent)
+                .frame(width: 32, height: 32)
+                .background(accent.opacity(0.13), in: RoundedRectangle(cornerRadius: 9, style: .continuous))
+            VStack(alignment: .leading, spacing: 3) {
+                Text(label)
+                    .font(.system(size: 11.5, weight: .semibold))
+                    .foregroundStyle(Theme.textTertiary)
+                value
+                    .font(.system(size: 14))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            HStack(spacing: 8) { actions }
         }
-        .buttonStyle(.borderless)
-        .help(title)
-        .accessibilityLabel(title)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 12)
+        .background(isHovered ? Theme.raised : .clear, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .onHover { isHovered = $0 }
+        .animation(.ui, value: isHovered)
     }
 }

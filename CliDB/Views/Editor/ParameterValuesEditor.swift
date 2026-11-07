@@ -1,72 +1,64 @@
 import SwiftUI
 
-/// A collapsible row for editing the list of values a parameter can be filled with.
+/// Edits the list of values a parameter can be filled with.
 /// `newValue` is owned by the caller so a value that was typed but not yet added can still be saved.
 struct ParameterValuesEditor: View {
     let parameter: TemplateParameter
     @Binding var values: [String]
     @Binding var newValue: String
 
-    @State private var isExpanded = false
+    @Environment(\.sectionAccent) private var accent
     @FocusState private var isFocused: Bool
 
-    private var summary: String {
-        let count = parameter.addingChoices(values).choices.count
-        switch count {
-        case 0: return "No values"
-        case 1: return "1 value"
-        default: return "\(count) values"
-        }
-    }
-
     var body: some View {
-        DisclosureGroup(isExpanded: $isExpanded) {
-            VStack(alignment: .leading, spacing: 8) {
-                let inlineChoices = parameter.choices.filter { !values.contains($0) }
-                if !inlineChoices.isEmpty || !values.isEmpty {
-                    FlowLayout {
-                        // Choices written in the template itself can only be changed there.
-                        ForEach(inlineChoices, id: \.self) { choice in
-                            Chip(text: choice, monospaced: true)
-                                .help("Defined in the template")
+        let inlineChoices = parameter.choices.filter { !values.contains($0) }
+        VStack(alignment: .leading, spacing: 8) {
+            Text(parameter.name)
+                .font(.system(size: 12.5, weight: .bold, design: .monospaced))
+                .foregroundStyle(accent)
+
+            if !inlineChoices.isEmpty || !values.isEmpty {
+                FlowLayout(spacing: 6) {
+                    // Choices written in the template itself can only be changed there.
+                    ForEach(inlineChoices, id: \.self) { choice in
+                        Chip(text: choice, systemImage: "lock.fill", monospaced: true)
+                            .help("Written in the command, edit it there")
+                    }
+                    ForEach(values, id: \.self) { value in
+                        Chip(text: value, monospaced: true, tint: accent) {
+                            withAnimation(Theme.motion(.ui)) { values.removeAll { $0 == value } }
                         }
-                        ForEach(values, id: \.self) { value in
-                            Chip(text: value, monospaced: true, style: .accent) {
-                                values.removeAll { $0 == value }
-                            }
-                        }
+                        .transition(.scale.combined(with: .opacity))
                     }
                 }
+            }
 
-                HStack {
-                    TextField("New value", text: $newValue, prompt: Text("Add a value"))
+            HStack(spacing: 8) {
+                FieldBox(monospaced: true) {
+                    TextField("New value", text: $newValue, prompt: Text("Add a value for \(parameter.name)"))
                         .labelsHidden()
-                        .textFieldStyle(.roundedBorder)
-                        .font(.system(.body, design: .monospaced))
                         .focused($isFocused)
                         .onSubmit(add)
                         .onChange(of: isFocused) {
                             if !isFocused { add() }
                         }
-                    Button("Add", action: add)
-                        .disabled(newValue.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
-            }
-            .padding(.top, 4)
-        } label: {
-            HStack {
-                Text(parameter.name)
-                    .font(.system(.body, design: .monospaced))
-                Spacer()
-                Text(summary)
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
+                Button(action: add) {
+                    Label("Add", systemImage: "plus")
+                }
+                .buttonStyle(PillButtonStyle(kind: .secondary))
+                .disabled(newValue.trimmingCharacters(in: .whitespaces).isEmpty)
             }
         }
+        .padding(12)
+        .background(Theme.raised.opacity(0.5), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(Theme.stroke))
     }
 
     private func add() {
-        values = Self.adding(newValue, to: values, for: parameter)
+        withAnimation(Theme.motion(.lively)) {
+            values = Self.adding(newValue, to: values, for: parameter)
+        }
         newValue = ""
     }
 

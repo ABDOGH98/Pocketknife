@@ -18,7 +18,11 @@ struct CodeTextView: NSViewRepresentable {
 
         let textView = scrollView.documentView as! NSTextView
         textView.delegate = context.coordinator
-        textView.font = .monospacedSystemFont(ofSize: NSFont.systemFontSize, weight: .regular)
+        textView.font = .monospacedSystemFont(ofSize: 13, weight: .regular)
+        textView.textColor = NSColor(name: nil) { appearance in
+            appearance.bestMatch(from: [.aqua, .darkAqua]) == .darkAqua ? NSColor(hex: 0xE4E7EB) : NSColor(hex: 0x1E242B)
+        }
+        textView.insertionPointColor = .controlAccentColor
         textView.drawsBackground = false
         textView.isRichText = false
         textView.importsGraphics = false
@@ -30,7 +34,10 @@ struct CodeTextView: NSViewRepresentable {
         textView.isAutomaticTextReplacementEnabled = false
         textView.isAutomaticSpellingCorrectionEnabled = false
         textView.isContinuousSpellCheckingEnabled = false
-        textView.textContainerInset = NSSize(width: 2, height: 6)
+        textView.textContainerInset = NSSize(width: 6, height: 8)
+        // Code reads left to right, even when the app is in a right-to-left language.
+        textView.baseWritingDirection = .leftToRight
+        textView.alignment = .left
         textView.string = text
         context.coordinator.lastFindRequest = findRequest
         return scrollView

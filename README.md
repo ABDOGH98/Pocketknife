@@ -45,18 +45,38 @@ The first time you open **CLI Commands** with an empty library, the app adds a f
 
 ## Features
 
+### Design
+
+- A **navigation rail** on the left is always visible: Home, Commands, Passwords and Utilities (**⌘0–⌘3**).
+- Every button has a visible shape, a pointer cursor, and hover and press feedback. Main actions show their shortcut (for example **⌘↩**) right on the button.
+- A calm palette that's easy on the eyes: a navy-slate base taken from the app icon, off-white text instead of pure white, and soft accents per section (mint for Commands, amber for Passwords, lavender for Utilities). Light and dark mode are both supported.
+- Gentle animations: cards and panels slide in, Copy buttons turn into a green "Copied" check, favorites pop, and the home screen has slowly drifting color glows. Animations are switched off when **Reduce Motion** is on in System Settings.
+
+### Settings
+
+Open it from the gear at the bottom of the rail, or with **⌘,**.
+
+- **Mode**: System, Light or Dark.
+- **Theme**: six palettes designed to be easy on the eyes: *Slate* (default), *Forest*, *Ocean*, *Dusk*, *Paper* (warm, low blue light) and *Graphite*. The whole app recolors instantly.
+- **Animations**: turn motion off entirely.
+- **Language**: System, English, Français, Español or العربية (with a right-to-left layout). Pocketknife offers to restart to apply it. Code and commands always read left to right.
+- **About**: version, and links to the [GitHub repository](https://github.com/ABDOGH98/Pocketknife) and its issue tracker.
+
+Palettes live in `Views/Design/Theme.swift` (`Palette`). Translations live in `CliDB/Localizable.xcstrings`.
+
 ### Home
 
-The main window opens on a home screen with three cards, one per section, each showing how many items it holds. Click a card or press **⌘1 / ⌘2 / ⌘3**. Press **⌘0**, or the Home button in the toolbar, to go back.
+A greeting, three large cards (one per section, with live counts), **quick actions** (New Command, New Login, Format JSON, Decode JWT…), and a **Recently used** list where each command can be copied with one click.
 
 ### 1. CLI Commands
 
-A three-column library: sidebar → command list → detail.
+Two panes: the command list on the left, the selected command on the right.
 
-- **Sidebar**: *All Commands*, *Favorites*, and one entry per tag, with counts.
-- **Search**: every word you type has to appear somewhere in the title, template, notes or tags.
+- **Filter chips**: *All*, *Favorites*, and one colored chip per tag, with counts.
+- **Search** (⌘F): every word you type has to appear somewhere in the title, template, notes or tags. ↑/↓ move through the results without leaving the field, and Return copies the selected command.
 - **Sort**: Recently Used (default), Most Used, Name, or Date Added. Your choice is remembered.
-- **Detail pane**: a form for each parameter, a live preview of the finished command with highlighting, a warning for required parameters that are still empty, *Reset to Defaults*, and usage stats ("Used 4 times · Last used yesterday").
+- **List**: ↑/↓ to move, Return or double-click to copy. Hovering a row shows a **Copy** button.
+- **Detail pane**: the command with highlighted values, a large **Copy Command** button, a field for each parameter with its saved values shown as **clickable chips**, *Save value*, *Reset*, and usage stats ("Used 4 times · last yesterday").
 - **Copy** (⌘↩ in the detail pane, ⇧⌘C from the menu) puts the finished command on the clipboard and counts it as a use.
 - **Editor**: opens in its own window (⌘N to create, ⌘E to edit) and has:
   - a template field with an **Insert Parameter** helper and a live preview,
@@ -93,12 +113,14 @@ A searchable list of saved logins, with favorites sorted to the top.
 - **Fields**: title, username, website, notes, password.
 - **The password is stored only in the macOS Keychain** (service `<bundle id>.passwords`), keyed by a UUID kept on the record. It is never written to the SwiftData database. Deleting a login removes its Keychain item too.
 - **Copy Password** (⌘↩) marks the clipboard entry as *concealed* (`org.nspasteboard.ConcealedType`) so clipboard managers skip it, and **clears the clipboard after 60 seconds** unless you've copied something else since then.
-- Show or hide the password, open the website (`https://` is added when you leave out the scheme), and copy the username.
+- Each field (username, password, website) is a row with labeled **Copy**, **Show/Hide** and **Open** buttons. Logins get a colored letter tile.
+- The editor has title, username, password (with **Generate**), website and notes.
+- Open the website (`https://` is added when you leave out the scheme).
 - **Password generator**: 20 characters with at least one letter, one digit and one symbol. Characters that look alike (`0 O 1 l I`) are never used.
 
 ### 3. Utilities
 
-A split view with one tool per sidebar entry. Each tool remembers its own input.
+Large tool tabs across the top, with input and output side by side. Each tool remembers its own input. When the input looks like it belongs to another tool (for example a JWT pasted into JSON), a **Looks like JWT · Switch** button moves it there.
 
 | Tool | Modes | Notes |
 |---|---|---|
@@ -116,6 +138,7 @@ Shared controls: Paste, Clear, Find in the input and output, **Use as Input** to
 | Shortcut | Action |
 |---|---|
 | ⌘0 / ⌘1 / ⌘2 / ⌘3 | Home / CLI Commands / Passwords / Utilities |
+| ⌘, | Settings |
 | ⌘N | New command (or new password in the Passwords section) |
 | ⌘↩ | Copy the selected command or password; in an editor, save |
 | ⇧⌘C | Copy the selected command to the clipboard |
@@ -123,7 +146,8 @@ Shared controls: Paste, Clear, Find in the input and output, **Use as Input** to
 | ⌘D | Duplicate the selected command |
 | ⇧⌘F | Add the command to Favorites or remove it |
 | ⌘⌫ | Delete the selected command (asks first) |
-| ⌘F | Find in a utility's input or output |
+| ⌘F | Search commands or logins |
+| ↑ / ↓, Return | Move through the list; copy the selection |
 | ⌃⌘F | Full screen for the expanded output window |
 | Esc | Cancel an editor |
 
@@ -146,13 +170,15 @@ CliDB/
 │   ├── Clipboard.swift         # Plain and concealed, auto-clearing copies
 │   └── SampleData.swift        # Sample commands added on first launch
 └── Views/
-    ├── ContentView.swift       # Section switching + Home toolbar button
+    ├── ContentView.swift       # Navigation rail + section switching
     ├── HomeView.swift          # Home screen cards
-    ├── Commands/               # Three-column command library
+    ├── Commands/               # Two-pane command library (filter chips, list, detail)
     ├── Detail/                 # Command detail + parameter form
     ├── Editor/                 # Command editor window, tag field, parameter values
     ├── Passwords/              # Password list, detail, editor
     ├── Utils/                  # Utilities + expanded output window
+    ├── Settings/               # Theme, language and About
+    ├── Design/                 # Theme (palettes, settings, sections), Controls (buttons, search, chips), Surfaces (cards, empty states)
     └── Components/             # Chip, FlowLayout, Toast, CodeTextView, HighlightedCommand
 CliDBTests/                     # Unit tests (Swift Testing)
 ```

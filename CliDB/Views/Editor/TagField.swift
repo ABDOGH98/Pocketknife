@@ -19,41 +19,41 @@ struct TagField: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            TextField("Tags", text: $text, prompt: Text("Type a tag and press Return"))
-                .focused($isFocused)
-                .onSubmit(commit)
-                .onChange(of: text) {
-                    if text.contains(",") { commit() }
-                }
-                .onChange(of: isFocused) {
-                    if !isFocused { commit() }
-                }
+        VStack(alignment: .leading, spacing: 10) {
+            FieldBox(label: String(localized: "Tags"), hint: String(localized: "Press Return or comma to add")) {
+                TextField("Tags", text: $text, prompt: Text("docker, git, network…"))
+                    .focused($isFocused)
+                    .onSubmit(commit)
+                    .onChange(of: text) {
+                        if text.contains(",") { commit() }
+                    }
+                    .onChange(of: isFocused) {
+                        if !isFocused { commit() }
+                    }
+            }
 
             if !tags.isEmpty {
-                FlowLayout {
+                FlowLayout(spacing: 6) {
                     ForEach(tags, id: \.self) { tag in
-                        Chip(text: tag, systemImage: "tag", style: .accent) {
-                            tags.removeAll { $0 == tag }
+                        TagChip(tag: tag) {
+                            withAnimation(Theme.motion(.ui)) { tags.removeAll { $0 == tag } }
                         }
+                        .transition(.scale.combined(with: .opacity))
                     }
                 }
             }
 
             if !matchingSuggestions.isEmpty {
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
-                    Text("Suggestions")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    FlowLayout {
+                    Text("Add:")
+                        .font(.system(size: 11.5, weight: .medium))
+                        .foregroundStyle(Theme.textTertiary)
+                    FlowLayout(spacing: 6) {
                         ForEach(matchingSuggestions, id: \.self) { suggestion in
-                            Button {
-                                tags = Self.adding(suggestion, to: tags)
+                            FilterChip(title: suggestion, systemImage: "plus", tint: Theme.swatch(for: suggestion), isSelected: false) {
+                                withAnimation(Theme.motion(.lively)) { tags = Self.adding(suggestion, to: tags) }
                                 text = ""
-                            } label: {
-                                Chip(text: suggestion, systemImage: "plus")
                             }
-                            .buttonStyle(.plain)
                             .accessibilityLabel("Add tag \(suggestion)")
                         }
                     }
@@ -63,7 +63,7 @@ struct TagField: View {
     }
 
     private func commit() {
-        tags = Self.adding(text, to: tags)
+        withAnimation(Theme.motion(.lively)) { tags = Self.adding(text, to: tags) }
         text = ""
     }
 
