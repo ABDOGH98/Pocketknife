@@ -237,4 +237,4 @@ Run them with **⌘U** in Xcode or `xcodebuild … test` (see [Getting started](
 
 - Bundle ID: `com.miy33t.CliDB`
 - The app was renamed from CliDB to **Pocketknife**. The Xcode project, target, scheme, source folders and bundle ID keep the old name on purpose: the bundle ID locates the Keychain items and the SwiftData store, so changing it would orphan existing data.
-- Version: 0.1.0
+- Version: 1.0.0
