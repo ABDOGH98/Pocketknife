@@ -1,0 +1,83 @@
+import SwiftUI
+
+/// Fields for filling in a command's parameters. Values are stored on the command,
+/// so they're kept between launches and used by Copy from anywhere in the app.
+struct ParameterFormView: View {
+    let parameters: [TemplateParameter]
+    @Bindable var command: SavedCommand
+
+    var body: some View {
+        Grid(alignment: .leadingFirstTextBaseline, horizontalSpacing: 12, verticalSpacing: 10) {
+            ForEach(parameters) { parameter in
+                GridRow {
+                    Text(parameter.name)
+                        .font(.system(.body, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                        .gridColumnAlignment(.trailing)
+                    ParameterField(parameter: parameter, command: command)
+                }
+            }
+        }
+    }
+}
+
+private struct ParameterField: View {
+    let parameter: TemplateParameter
+    @Bindable var command: SavedCommand
+
+    private var value: Binding<String> {
+        Binding(
+            get: { command.lastValues[parameter.name] ?? "" },
+            set: { command.lastValues[parameter.name] = $0 }
+        )
+    }
+
+    var body: some View {
+        let current = value.wrappedValue
+        let effective = current.isEmpty ? parameter.fallbackValue : current
+
+        HStack(spacing: 6) {
+            TextField(parameter.name, text: value, prompt: Text(parameter.fallbackValue.isEmpty ? "Required" : parameter.fallbackValue))
+                .labelsHidden()
+                .textFieldStyle(.roundedBorder)
+                .font(.system(.body, design: .monospaced))
+
+            if !parameter.choices.isEmpty {
+                Menu {
+                    ForEach(parameter.choices, id: \.self) { choice in
+                        Button {
+                            value.wrappedValue = choice
+                        } label: {
+                            if choice == effective {
+                                Label(choice, systemImage: "checkmark")
+                            } else {
+                                Text(choice)
+                            }
+                        }
+                    }
+                } label: {
+                    Label(
+                        parameter.choices.count == 1 ? "1 value" : "\(parameter.choices.count) values",
+                        systemImage: "list.bullet"
+                    )
+                }
+                .menuStyle(.button)
+                .buttonStyle(.bordered)
+                .fixedSize()
+                .help("Choose a saved value for \(parameter.name)")
+                .accessibilityLabel("Saved values for \(parameter.name)")
+            }
+
+            if !current.isEmpty, !parameter.choices.contains(current) {
+                Button {
+                    command.parameterValues[parameter.name, default: []].append(current)
+                } label: {
+                    Image(systemName: "plus.circle")
+                }
+                .buttonStyle(.borderless)
+                .help("Save “\(current)” as a value for \(parameter.name)")
+                .accessibilityLabel("Save value")
+            }
+        }
+    }
+}

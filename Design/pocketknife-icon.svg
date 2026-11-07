@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#26354A"/>
+      <stop offset="1" stop-color="#0D141E"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.3" r="0.7">
+      <stop offset="0" stop-color="#3B5578" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#3B5578" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="steel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F4F7FA"/>
+      <stop offset="0.5" stop-color="#C9D2DC"/>
+      <stop offset="1" stop-color="#8E9AA8"/>
+    </linearGradient>
+    <linearGradient id="steelDark" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#DCE3EA"/>
+      <stop offset="1" stop-color="#7D8997"/>
+    </linearGradient>
+    <linearGradient id="handle" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFC24D"/>
+      <stop offset="0.55" stop-color="#F29A1F"/>
+      <stop offset="1" stop-color="#C96F0C"/>
+    </linearGradient>
+    <linearGradient id="rivet" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#9AA6B3"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <!-- macOS squircle background -->
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#bg)"/>
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#glow)"/>
+  <rect x="101.5" y="101.5" width="821" height="821" rx="184" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="3"/>
+
+  <g filter="url(#shadow)">
+    <!-- Blade (utilities) -->
+    <g transform="translate(352 676) rotate(-84)">
+      <path d="M0,-36 H330 C405,-36 452,-18 478,10 C380,32 200,38 0,38 Z" fill="url(#steel)"/>
+      <path d="M40,24 C200,24 360,20 462,6" fill="none" stroke="#FFFFFF" stroke-opacity="0.7" stroke-width="4" stroke-linecap="round"/>
+    </g>
+
+    <!-- Key tool (passwords) -->
+    <g transform="translate(352 676) rotate(-60)">
+      <rect x="0" y="-20" width="330" height="40" rx="20" fill="url(#steelDark)"/>
+      <rect x="244" y="12" width="22" height="40" rx="5" fill="url(#steelDark)"/>
+      <rect x="278" y="12" width="22" height="28" rx="5" fill="url(#steelDark)"/>
+      <circle cx="300" cy="0" r="7" fill="#5C6876"/>
+    </g>
+
+    <!-- Prompt tool (commands) -->
+    <g transform="translate(352 676) rotate(-34)">
+      <rect x="0" y="-34" width="410" height="68" rx="34" fill="url(#steel)"/>
+      <path d="M268,-17 L296,0 L268,17" fill="none" stroke="#1F7AE0" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M310,17 H350" stroke="#1F7AE0" stroke-width="10" stroke-linecap="round"/>
+    </g>
+
+    <!-- Handle -->
+    <g transform="translate(352 676) rotate(-6)">
+      <rect x="-70" y="-62" width="560" height="124" rx="62" fill="url(#handle)"/>
+      <rect x="-50" y="-48" width="520" height="22" rx="11" fill="#FFFFFF" fill-opacity="0.22"/>
+      <circle cx="0" cy="0" r="24" fill="url(#rivet)"/>
+      <circle cx="0" cy="0" r="9" fill="#7D8997"/>
+      <circle cx="420" cy="0" r="18" fill="url(#rivet)"/>
+    </g>
+  </g>
+</svg>
