@@ -1,0 +1,938 @@
+{
+ "%@ %@ Output": {
+  "en": "%1$@ %2$@ Output",
+  "fr_reference": "Sortie %1$@ %2$@"
+ },
+ "%@ (⌘%@)": {
+  "en": "%1$@ (⌘%2$@)",
+  "fr_reference": "%1$@ (⌘%2$@)"
+ },
+ "A placeholder isn’t closed. Check your {{ and }}.": {
+  "en": "A placeholder isn’t closed. Check your {{ and }}.",
+  "fr_reference": "Un paramètre n’est pas fermé. Vérifiez vos {{ et }}."
+ },
+ "About": {
+  "en": "About",
+  "fr_reference": "À propos"
+ },
+ "Add": {
+  "en": "Add",
+  "fr_reference": "Ajouter"
+ },
+ "Add Command": {
+  "en": "Add Command",
+  "fr_reference": "Ajouter la commande"
+ },
+ "Add Login": {
+  "en": "Add Login",
+  "fr_reference": "Ajouter l’identifiant"
+ },
+ "Add a value for %@": {
+  "en": "Add a value for %@",
+  "fr_reference": "Ajouter une valeur pour %@"
+ },
+ "Add tag %@": {
+  "en": "Add tag %@",
+  "fr_reference": "Ajouter le tag %@"
+ },
+ "Add to Favorites": {
+  "en": "Add to Favorites",
+  "fr_reference": "Ajouter aux favoris"
+ },
+ "Add to Favorites (⇧⌘F)": {
+  "en": "Add to Favorites (⇧⌘F)",
+  "fr_reference": "Ajouter aux favoris (⇧⌘F)"
+ },
+ "Add:": {
+  "en": "Add:",
+  "fr_reference": "Ajouter :"
+ },
+ "Added %@": {
+  "en": "Added %@",
+  "fr_reference": "Ajouté le %@"
+ },
+ "All": {
+  "en": "All",
+  "fr_reference": "Tout"
+ },
+ "Animations": {
+  "en": "Animations",
+  "fr_reference": "Animations"
+ },
+ "Appearance": {
+  "en": "Appearance",
+  "fr_reference": "Apparence"
+ },
+ "CLI Commands": {
+  "en": "CLI Commands",
+  "fr_reference": "Commandes CLI"
+ },
+ "Cancel": {
+  "en": "Cancel",
+  "fr_reference": "Annuler"
+ },
+ "Change the order of the list": {
+  "en": "Change the order of the list",
+  "fr_reference": "Changer l’ordre de la liste"
+ },
+ "Choose one from the list to fill it in and copy it.": {
+  "en": "Choose one from the list to fill it in and copy it.",
+  "fr_reference": "Choisissez-en une dans la liste pour la remplir et la copier."
+ },
+ "Choose one from the list to see and copy its details.": {
+  "en": "Choose one from the list to see and copy its details.",
+  "fr_reference": "Choisissez-en un dans la liste pour voir et copier ses détails."
+ },
+ "Clear": {
+  "en": "Clear",
+  "fr_reference": "Effacer"
+ },
+ "Clear Search": {
+  "en": "Clear Search",
+  "fr_reference": "Effacer la recherche"
+ },
+ "Clear what you typed and go back to the defaults": {
+  "en": "Clear what you typed and go back to the defaults",
+  "fr_reference": "Effacer la saisie et revenir aux valeurs par défaut"
+ },
+ "Click the star on a command to pin it here.": {
+  "en": "Click the star on a command to pin it here.",
+  "fr_reference": "Cliquez sur l’étoile d’une commande pour l’épingler ici."
+ },
+ "Command": {
+  "en": "Command",
+  "fr_reference": "Commande"
+ },
+ "Command Not Found": {
+  "en": "Command Not Found",
+  "fr_reference": "Commande introuvable"
+ },
+ "Command template": {
+  "en": "Command template",
+  "fr_reference": "Modèle de commande"
+ },
+ "Command: %@": {
+  "en": "Command: %@",
+  "fr_reference": "Commande : %@"
+ },
+ "Commands": {
+  "en": "Commands",
+  "fr_reference": "Commandes"
+ },
+ "Copied": {
+  "en": "Copied",
+  "fr_reference": "Copié"
+ },
+ "Copied output": {
+  "en": "Copied output",
+  "fr_reference": "Résultat copié"
+ },
+ "Copied passwords are hidden from clipboard managers and cleared after a minute.": {
+  "en": "Copied passwords are hidden from clipboard managers and cleared after a minute.",
+  "fr_reference": "Les mots de passe copiés sont masqués aux gestionnaires de presse-papiers et effacés au bout d’une minute."
+ },
+ "Copied to Clipboard": {
+  "en": "Copied to Clipboard",
+  "fr_reference": "Copié dans le presse-papiers"
+ },
+ "Copied — %@ still empty": {
+  "en": "Copied — %@ still empty",
+  "fr_reference": "Copié — %@ encore vide"
+ },
+ "Copied — fill in %@": {
+  "en": "Copied — fill in %@",
+  "fr_reference": "Copié — à remplir : %@"
+ },
+ "Copied “%@”": {
+  "en": "Copied “%@”",
+  "fr_reference": "« %@ » copié"
+ },
+ "Copy": {
+  "en": "Copy",
+  "fr_reference": "Copier"
+ },
+ "Copy Command": {
+  "en": "Copy Command",
+  "fr_reference": "Copier la commande"
+ },
+ "Copy Output": {
+  "en": "Copy Output",
+  "fr_reference": "Copier le résultat"
+ },
+ "Copy Password": {
+  "en": "Copy Password",
+  "fr_reference": "Copier le mot de passe"
+ },
+ "Copy Username": {
+  "en": "Copy Username",
+  "fr_reference": "Copier l’identifiant"
+ },
+ "Copy the output": {
+  "en": "Copy the output",
+  "fr_reference": "Copier le résultat"
+ },
+ "Copy to Clipboard": {
+  "en": "Copy to Clipboard",
+  "fr_reference": "Copier dans le presse-papiers"
+ },
+ "Couldn’t Save Password": {
+  "en": "Couldn’t Save Password",
+  "fr_reference": "Impossible d’enregistrer le mot de passe"
+ },
+ "Dark": {
+  "en": "Dark",
+  "fr_reference": "Sombre"
+ },
+ "Date Added": {
+  "en": "Date Added",
+  "fr_reference": "Date d’ajout"
+ },
+ "Decode": {
+  "en": "Decode",
+  "fr_reference": "Décoder"
+ },
+ "Decode JWT": {
+  "en": "Decode JWT",
+  "fr_reference": "Décoder un JWT"
+ },
+ "Decode tokens": {
+  "en": "Decode tokens",
+  "fr_reference": "Décoder des jetons"
+ },
+ "Deep blue with aqua": {
+  "en": "Deep blue with aqua",
+  "fr_reference": "Bleu profond et turquoise"
+ },
+ "Default": {
+  "en": "Default",
+  "fr_reference": "Par défaut"
+ },
+ "Default: %@": {
+  "en": "Default: %@",
+  "fr_reference": "Par défaut : %@"
+ },
+ "Delete": {
+  "en": "Delete",
+  "fr_reference": "Supprimer"
+ },
+ "Delete this login (⌘⌫)": {
+  "en": "Delete this login (⌘⌫)",
+  "fr_reference": "Supprimer cet identifiant (⌘⌫)"
+ },
+ "Delete “%@”?": {
+  "en": "Delete “%@”?",
+  "fr_reference": "Supprimer « %@ » ?"
+ },
+ "Delete…": {
+  "en": "Delete…",
+  "fr_reference": "Supprimer…"
+ },
+ "Discard Changes": {
+  "en": "Discard Changes",
+  "fr_reference": "Abandonner les modifications"
+ },
+ "Discard changes?": {
+  "en": "Discard changes?",
+  "fr_reference": "Abandonner les modifications ?"
+ },
+ "Done": {
+  "en": "Done",
+  "fr_reference": "Terminé"
+ },
+ "Duplicate": {
+  "en": "Duplicate",
+  "fr_reference": "Dupliquer"
+ },
+ "Duplicate or delete": {
+  "en": "Duplicate or delete",
+  "fr_reference": "Dupliquer ou supprimer"
+ },
+ "Duplicated": {
+  "en": "Duplicated",
+  "fr_reference": "Dupliquée"
+ },
+ "Dusk": {
+  "en": "Dusk",
+  "fr_reference": "Crépuscule"
+ },
+ "Edit": {
+  "en": "Edit",
+  "fr_reference": "Modifier"
+ },
+ "Edit Command": {
+  "en": "Edit Command",
+  "fr_reference": "Modifier la commande"
+ },
+ "Edit Login": {
+  "en": "Edit Login",
+  "fr_reference": "Modifier l’identifiant"
+ },
+ "Edit “%@”": {
+  "en": "Edit “%@”",
+  "fr_reference": "Modifier « %@ »"
+ },
+ "Edit…": {
+  "en": "Edit…",
+  "fr_reference": "Modifier…"
+ },
+ "Encode": {
+  "en": "Encode",
+  "fr_reference": "Encoder"
+ },
+ "Encode · Decode": {
+  "en": "Encode · Decode",
+  "fr_reference": "Encoder · Décoder"
+ },
+ "Enter or exit full screen (⌃⌘F)": {
+  "en": "Enter or exit full screen (⌃⌘F)",
+  "fr_reference": "Activer ou quitter le plein écran (⌃⌘F)"
+ },
+ "Error": {
+  "en": "Error",
+  "fr_reference": "Erreur"
+ },
+ "Expand": {
+  "en": "Expand",
+  "fr_reference": "Agrandir"
+ },
+ "Favorite": {
+  "en": "Favorite",
+  "fr_reference": "Favori"
+ },
+ "Favorites": {
+  "en": "Favorites",
+  "fr_reference": "Favoris"
+ },
+ "Fill in %@": {
+  "en": "Fill in %@",
+  "fr_reference": "À remplir : %@"
+ },
+ "Fill in and copy the shell commands you can never quite remember.": {
+  "en": "Fill in and copy the shell commands you can never quite remember.",
+  "fr_reference": "Remplissez et copiez les commandes shell qu’on n’arrive jamais à retenir."
+ },
+ "Fill in the blanks": {
+  "en": "Fill in the blanks",
+  "fr_reference": "Complétez les champs"
+ },
+ "Find": {
+  "en": "Find",
+  "fr_reference": "Rechercher"
+ },
+ "Follow macOS, or always use light or dark.": {
+  "en": "Follow macOS, or always use light or dark.",
+  "fr_reference": "Suivre macOS, ou toujours utiliser le mode clair ou sombre."
+ },
+ "Forest": {
+  "en": "Forest",
+  "fr_reference": "Forêt"
+ },
+ "Format": {
+  "en": "Format",
+  "fr_reference": "Formater"
+ },
+ "Format JSON": {
+  "en": "Format JSON",
+  "fr_reference": "Formater du JSON"
+ },
+ "Format JSON and XML, encode Base64 and decode JWTs.": {
+  "en": "Format JSON and XML, encode Base64 and decode JWTs.",
+  "fr_reference": "Formatez du JSON et du XML, encodez en Base64 et décodez des JWT."
+ },
+ "Format XML": {
+  "en": "Format XML",
+  "fr_reference": "Formater du XML"
+ },
+ "Format · Minify": {
+  "en": "Format · Minify",
+  "fr_reference": "Formater · Minifier"
+ },
+ "Free and open source. Everything stays on your Mac.": {
+  "en": "Free and open source. Everything stays on your Mac.",
+  "fr_reference": "Gratuit et open source. Tout reste sur votre Mac."
+ },
+ "Full Screen": {
+  "en": "Full Screen",
+  "fr_reference": "Plein écran"
+ },
+ "Generate": {
+  "en": "Generate",
+  "fr_reference": "Générer"
+ },
+ "Go": {
+  "en": "Go",
+  "fr_reference": "Aller"
+ },
+ "Good afternoon": {
+  "en": "Good afternoon",
+  "fr_reference": "Bon après-midi"
+ },
+ "Good evening": {
+  "en": "Good evening",
+  "fr_reference": "Bonsoir"
+ },
+ "Good morning": {
+  "en": "Good morning",
+  "fr_reference": "Bonjour"
+ },
+ "Graphite": {
+  "en": "Graphite",
+  "fr_reference": "Graphite"
+ },
+ "Hide": {
+  "en": "Hide",
+  "fr_reference": "Masquer"
+ },
+ "Home": {
+  "en": "Home",
+  "fr_reference": "Accueil"
+ },
+ "Input": {
+  "en": "Input",
+  "fr_reference": "Entrée"
+ },
+ "Insert": {
+  "en": "Insert",
+  "fr_reference": "Insérer"
+ },
+ "Insert Parameter": {
+  "en": "Insert Parameter",
+  "fr_reference": "Insérer un paramètre"
+ },
+ "Insert {{name}}, {{name:default}} or {{name|a,b,c}} at the cursor": {
+  "en": "Insert {{name}}, {{name:default}} or {{name|a,b,c}} at the cursor",
+  "fr_reference": "Insérer {{name}}, {{name:default}} ou {{name|a,b,c}} au curseur"
+ },
+ "It may have been deleted.": {
+  "en": "It may have been deleted.",
+  "fr_reference": "Elle a peut-être été supprimée."
+ },
+ "Keep Editing": {
+  "en": "Keep Editing",
+  "fr_reference": "Continuer"
+ },
+ "Keep “%@” as a value you can pick next time": {
+  "en": "Keep “%@” as a value you can pick next time",
+  "fr_reference": "Garder « %@ » comme valeur à choisir la prochaine fois"
+ },
+ "Kill process on port": {
+  "en": "Kill process on port",
+  "fr_reference": "Tuer le processus sur un port"
+ },
+ "Language": {
+  "en": "Language",
+  "fr_reference": "Langue"
+ },
+ "Light": {
+  "en": "Light",
+  "fr_reference": "Clair"
+ },
+ "Login Saved": {
+  "en": "Login Saved",
+  "fr_reference": "Identifiant enregistré"
+ },
+ "Logins at hand, with passwords kept safely in your Keychain.": {
+  "en": "Logins at hand, with passwords kept safely in your Keychain.",
+  "fr_reference": "Vos identifiants à portée de main, avec les mots de passe en sécurité dans le trousseau."
+ },
+ "Looks like %@ · Switch": {
+  "en": "Looks like %@ · Switch",
+  "fr_reference": "Ressemble à du %@ · Basculer"
+ },
+ "Make Pocketknife look and speak the way you like.": {
+  "en": "Make Pocketknife look and speak the way you like.",
+  "fr_reference": "Adaptez l’apparence et la langue de Pocketknife à vos goûts."
+ },
+ "Make a strong 20-character password": {
+  "en": "Make a strong 20-character password",
+  "fr_reference": "Créer un mot de passe robuste de 20 caractères"
+ },
+ "Minify": {
+  "en": "Minify",
+  "fr_reference": "Minifier"
+ },
+ "Mode": {
+  "en": "Mode",
+  "fr_reference": "Mode"
+ },
+ "More": {
+  "en": "More",
+  "fr_reference": "Plus"
+ },
+ "Most Used": {
+  "en": "Most Used",
+  "fr_reference": "Les plus utilisées"
+ },
+ "Move the output to the input to transform it again": {
+  "en": "Move the output to the input to transform it again",
+  "fr_reference": "Placer le résultat en entrée pour le transformer à nouveau"
+ },
+ "Name": {
+  "en": "Name",
+  "fr_reference": "Nom"
+ },
+ "Navy calm, the default": {
+  "en": "Navy calm, the default",
+  "fr_reference": "Bleu marine apaisant, par défaut"
+ },
+ "Neutral grays, minimal": {
+  "en": "Neutral grays, minimal",
+  "fr_reference": "Gris neutres, minimaliste"
+ },
+ "Never used yet": {
+  "en": "Never used yet",
+  "fr_reference": "Jamais utilisée"
+ },
+ "New": {
+  "en": "New",
+  "fr_reference": "Nouveau"
+ },
+ "New Command": {
+  "en": "New Command",
+  "fr_reference": "Nouvelle commande"
+ },
+ "New Command (⌘N)": {
+  "en": "New Command (⌘N)",
+  "fr_reference": "Nouvelle commande (⌘N)"
+ },
+ "New Login": {
+  "en": "New Login",
+  "fr_reference": "Nouvel identifiant"
+ },
+ "New Login (⌘N)": {
+  "en": "New Login (⌘N)",
+  "fr_reference": "Nouvel identifiant (⌘N)"
+ },
+ "New Password": {
+  "en": "New Password",
+  "fr_reference": "Nouveau mot de passe"
+ },
+ "New value": {
+  "en": "New value",
+  "fr_reference": "Nouvelle valeur"
+ },
+ "No commands yet": {
+  "en": "No commands yet",
+  "fr_reference": "Aucune commande"
+ },
+ "No favorites": {
+  "en": "No favorites",
+  "fr_reference": "Aucun favori"
+ },
+ "No logins yet": {
+  "en": "No logins yet",
+  "fr_reference": "Aucun identifiant"
+ },
+ "No password saved": {
+  "en": "No password saved",
+  "fr_reference": "Aucun mot de passe enregistré"
+ },
+ "No results": {
+  "en": "No results",
+  "fr_reference": "Aucun résultat"
+ },
+ "No username": {
+  "en": "No username",
+  "fr_reference": "Pas d’identifiant"
+ },
+ "Notes": {
+  "en": "Notes",
+  "fr_reference": "Notes"
+ },
+ "Nothing matches “%@”.": {
+  "en": "Nothing matches “%@”.",
+  "fr_reference": "Aucun résultat pour « %@ »."
+ },
+ "Nothing matches “%@”. Try fewer words.": {
+  "en": "Nothing matches “%@”. Try fewer words.",
+  "fr_reference": "Aucun résultat pour « %@ ». Essayez avec moins de mots."
+ },
+ "OK": {
+  "en": "OK",
+  "fr_reference": "OK"
+ },
+ "Ocean": {
+  "en": "Ocean",
+  "fr_reference": "Océan"
+ },
+ "Open": {
+  "en": "Open",
+  "fr_reference": "Ouvrir"
+ },
+ "Open the output in a large window": {
+  "en": "Open the output in a large window",
+  "fr_reference": "Ouvrir le résultat dans une grande fenêtre"
+ },
+ "Optional": {
+  "en": "Optional",
+  "fr_reference": "Facultatif"
+ },
+ "Optional · Markdown": {
+  "en": "Optional · Markdown",
+  "fr_reference": "Facultatif · Markdown"
+ },
+ "Optional, comma-separated": {
+  "en": "Optional, comma-separated",
+  "fr_reference": "Facultatif, séparées par des virgules"
+ },
+ "Optional. Saved values show up as chips you can click when filling in the command.": {
+  "en": "Optional. Saved values show up as chips you can click when filling in the command.",
+  "fr_reference": "Facultatif. Les valeurs enregistrées apparaissent sous forme de pastilles à cliquer quand vous remplissez la commande."
+ },
+ "Output": {
+  "en": "Output",
+  "fr_reference": "Sortie"
+ },
+ "Paper": {
+  "en": "Paper",
+  "fr_reference": "Papier"
+ },
+ "Password": {
+  "en": "Password",
+  "fr_reference": "Mot de passe"
+ },
+ "Password Copied — clears in 1 minute": {
+  "en": "Password Copied — clears in 1 minute",
+  "fr_reference": "Mot de passe copié — effacé dans 1 minute"
+ },
+ "Password copied %@": {
+  "en": "Password copied %@",
+  "fr_reference": "Mot de passe copié %@"
+ },
+ "Passwords": {
+  "en": "Passwords",
+  "fr_reference": "Mots de passe"
+ },
+ "Paste": {
+  "en": "Paste",
+  "fr_reference": "Coller"
+ },
+ "Paste a JWT here (a Bearer prefix is fine)": {
+  "en": "Paste a JWT here (a Bearer prefix is fine)",
+  "fr_reference": "Collez un JWT ici (le préfixe Bearer est accepté)"
+ },
+ "Paste from Clipboard": {
+  "en": "Paste from Clipboard",
+  "fr_reference": "Coller depuis le presse-papiers"
+ },
+ "Paste or type JSON here": {
+  "en": "Paste or type JSON here",
+  "fr_reference": "Collez ou saisissez du JSON ici"
+ },
+ "Paste or type XML here": {
+  "en": "Paste or type XML here",
+  "fr_reference": "Collez ou saisissez du XML ici"
+ },
+ "Paste something in. The result updates as you type.": {
+  "en": "Paste something in. The result updates as you type.",
+  "fr_reference": "Collez quelque chose. Le résultat se met à jour pendant la saisie."
+ },
+ "Paste text or Base64 here": {
+  "en": "Paste text or Base64 here",
+  "fr_reference": "Collez du texte ou du Base64 ici"
+ },
+ "Pick a command": {
+  "en": "Pick a command",
+  "fr_reference": "Choisissez une commande"
+ },
+ "Pick a login": {
+  "en": "Pick a login",
+  "fr_reference": "Choisissez un identifiant"
+ },
+ "Pick:": {
+  "en": "Pick:",
+  "fr_reference": "Choisir :"
+ },
+ "Plum evening, violet and rose": {
+  "en": "Plum evening, violet and rose",
+  "fr_reference": "Soirée prune, violet et rose"
+ },
+ "Press Return or comma to add": {
+  "en": "Press Return or comma to add",
+  "fr_reference": "Entrée ou virgule pour ajouter"
+ },
+ "Preview": {
+  "en": "Preview",
+  "fr_reference": "Aperçu"
+ },
+ "Quick actions": {
+  "en": "Quick actions",
+  "fr_reference": "Actions rapides"
+ },
+ "Recently Used": {
+  "en": "Recently Used",
+  "fr_reference": "Utilisées récemment"
+ },
+ "Recently used": {
+  "en": "Recently used",
+  "fr_reference": "Utilisées récemment"
+ },
+ "Recovery codes are in the safe": {
+  "en": "Recovery codes are in the safe",
+  "fr_reference": "Les codes de récupération sont dans le coffre"
+ },
+ "Remove %@": {
+  "en": "Remove %@",
+  "fr_reference": "Retirer %@"
+ },
+ "Remove from Favorites": {
+  "en": "Remove from Favorites",
+  "fr_reference": "Retirer des favoris"
+ },
+ "Remove from Favorites (⇧⌘F)": {
+  "en": "Remove from Favorites (⇧⌘F)",
+  "fr_reference": "Retirer des favoris (⇧⌘F)"
+ },
+ "Report an Issue": {
+  "en": "Report an Issue",
+  "fr_reference": "Signaler un problème"
+ },
+ "Required": {
+  "en": "Required",
+  "fr_reference": "Obligatoire"
+ },
+ "Reset": {
+  "en": "Reset",
+  "fr_reference": "Réinitialiser"
+ },
+ "Restart Now": {
+  "en": "Restart Now",
+  "fr_reference": "Redémarrer"
+ },
+ "Restart Pocketknife to use the new language.": {
+  "en": "Restart Pocketknife to use the new language.",
+  "fr_reference": "Redémarrez Pocketknife pour utiliser la nouvelle langue."
+ },
+ "Sage greens, very restful": {
+  "en": "Sage greens, very restful",
+  "fr_reference": "Verts sauge, très reposant"
+ },
+ "Same as macOS": {
+  "en": "Same as macOS",
+  "fr_reference": "Comme macOS"
+ },
+ "Save": {
+  "en": "Save",
+  "fr_reference": "Enregistrer"
+ },
+ "Save the commands you use often, then search and copy them in seconds.": {
+  "en": "Save the commands you use often, then search and copy them in seconds.",
+  "fr_reference": "Enregistrez les commandes que vous utilisez souvent, puis retrouvez-les et copiez-les en quelques secondes."
+ },
+ "Save usernames and passwords here. Passwords are stored in your Mac’s Keychain.": {
+  "en": "Save usernames and passwords here. Passwords are stored in your Mac’s Keychain.",
+  "fr_reference": "Enregistrez ici vos identifiants et mots de passe. Les mots de passe sont stockés dans le trousseau de votre Mac."
+ },
+ "Save value": {
+  "en": "Save value",
+  "fr_reference": "Garder la valeur"
+ },
+ "Search": {
+  "en": "Search",
+  "fr_reference": "Rechercher"
+ },
+ "Search commands": {
+  "en": "Search commands",
+  "fr_reference": "Rechercher des commandes"
+ },
+ "Search logins": {
+  "en": "Search logins",
+  "fr_reference": "Rechercher des identifiants"
+ },
+ "Search the input (⌘F)": {
+  "en": "Search the input (⌘F)",
+  "fr_reference": "Rechercher dans l’entrée (⌘F)"
+ },
+ "Search the output (⌘F)": {
+  "en": "Search the output (⌘F)",
+  "fr_reference": "Rechercher dans la sortie (⌘F)"
+ },
+ "See all": {
+  "en": "See all",
+  "fr_reference": "Tout voir"
+ },
+ "Settings": {
+  "en": "Settings",
+  "fr_reference": "Réglages"
+ },
+ "Settings…": {
+  "en": "Settings…",
+  "fr_reference": "Réglages…"
+ },
+ "Show": {
+  "en": "Show",
+  "fr_reference": "Afficher"
+ },
+ "Signatures are shown but not verified": {
+  "en": "Signatures are shown but not verified",
+  "fr_reference": "Les signatures sont affichées mais pas vérifiées"
+ },
+ "Slate": {
+  "en": "Slate",
+  "fr_reference": "Ardoise"
+ },
+ "Slides, bounces and glowing backgrounds. Always off when Reduce Motion is on in System Settings.": {
+  "en": "Slides, bounces and glowing backgrounds. Always off when Reduce Motion is on in System Settings.",
+  "fr_reference": "Glissements, rebonds et fonds lumineux. Toujours désactivées si « Réduire les animations » est activé dans les Réglages Système."
+ },
+ "Sort By": {
+  "en": "Sort By",
+  "fr_reference": "Trier par"
+ },
+ "Sort by": {
+  "en": "Sort by",
+  "fr_reference": "Trier par"
+ },
+ "Star the Project": {
+  "en": "Star the Project",
+  "fr_reference": "Mettre une étoile"
+ },
+ "Switched to %@": {
+  "en": "Switched to %@",
+  "fr_reference": "Passage à %@"
+ },
+ "System": {
+  "en": "System",
+  "fr_reference": "Système"
+ },
+ "Tags": {
+  "en": "Tags",
+  "fr_reference": "Tags"
+ },
+ "The password is saved in your Mac’s Keychain.": {
+  "en": "The password is saved in your Mac’s Keychain.",
+  "fr_reference": "Le mot de passe est enregistré dans le trousseau de votre Mac."
+ },
+ "The result appears here": {
+  "en": "The result appears here",
+  "fr_reference": "Le résultat s’affiche ici"
+ },
+ "The username and password will be removed from Pocketknife and your Keychain. This can’t be undone.": {
+  "en": "The username and password will be removed from Pocketknife and your Keychain. This can’t be undone.",
+  "fr_reference": "L’identifiant et le mot de passe seront supprimés de Pocketknife et de votre trousseau. Cette action est irréversible."
+ },
+ "Theme": {
+  "en": "Theme",
+  "fr_reference": "Thème"
+ },
+ "Theme, language and information about the app.": {
+  "en": "Theme, language and information about the app.",
+  "fr_reference": "Thème, langue et informations sur l’app."
+ },
+ "This command and its saved values will be removed. This can’t be undone.": {
+  "en": "This command and its saved values will be removed. This can’t be undone.",
+  "fr_reference": "Cette commande et ses valeurs enregistrées seront supprimées. Cette action est irréversible."
+ },
+ "This command hasn’t been added yet.": {
+  "en": "This command hasn’t been added yet.",
+  "fr_reference": "Cette commande n’a pas encore été ajoutée."
+ },
+ "Tip: write {{name}} for a value you fill in each time, or use Insert Parameter.": {
+  "en": "Tip: write {{name}} for a value you fill in each time, or use Insert Parameter.",
+  "fr_reference": "Astuce : écrivez {{name}} pour une valeur à remplir à chaque fois, ou utilisez Insérer un paramètre."
+ },
+ "Title": {
+  "en": "Title",
+  "fr_reference": "Titre"
+ },
+ "Type a value": {
+  "en": "Type a value",
+  "fr_reference": "Saisissez une valeur"
+ },
+ "URL-safe": {
+  "en": "URL-safe",
+  "fr_reference": "Compatible URL"
+ },
+ "Use - and _ instead of + and /, without = padding": {
+  "en": "Use - and _ instead of + and /, without = padding",
+  "fr_reference": "Utiliser - et _ au lieu de + et /, sans remplissage ="
+ },
+ "Use as Input": {
+  "en": "Use as Input",
+  "fr_reference": "Utiliser en entrée"
+ },
+ "Use {{name}} for the parts you fill in each time.": {
+  "en": "Use {{name}} for the parts you fill in each time.",
+  "fr_reference": "Utilisez {{name}} pour les parties à remplir à chaque fois."
+ },
+ "Use “%@”": {
+  "en": "Use “%@”",
+  "fr_reference": "Utiliser « %@ »"
+ },
+ "Used %lld times · last %@": {
+  "en": "Used %1$lld times · last %2$@",
+  "fr_reference": "Utilisée %1$lld fois · dernière %2$@"
+ },
+ "Used once · last %@": {
+  "en": "Used once · last %@",
+  "fr_reference": "Utilisée une fois · dernière %@"
+ },
+ "Username": {
+  "en": "Username",
+  "fr_reference": "Identifiant"
+ },
+ "Username Copied": {
+  "en": "Username Copied",
+  "fr_reference": "Identifiant copié"
+ },
+ "Utilities": {
+  "en": "Utilities",
+  "fr_reference": "Utilitaires"
+ },
+ "Values": {
+  "en": "Values",
+  "fr_reference": "Valeurs"
+ },
+ "Values to pick from": {
+  "en": "Values to pick from",
+  "fr_reference": "Valeurs au choix"
+ },
+ "Version %@": {
+  "en": "Version %@",
+  "fr_reference": "Version %@"
+ },
+ "View on GitHub": {
+  "en": "View on GitHub",
+  "fr_reference": "Voir sur GitHub"
+ },
+ "Warm sepia, low blue light": {
+  "en": "Warm sepia, low blue light",
+  "fr_reference": "Sépia chaud, peu de lumière bleue"
+ },
+ "Website": {
+  "en": "Website",
+  "fr_reference": "Site web"
+ },
+ "What do you need today?": {
+  "en": "What do you need today?",
+  "fr_reference": "De quoi avez-vous besoin aujourd’hui ?"
+ },
+ "What it does, when to use it": {
+  "en": "What it does, when to use it",
+  "fr_reference": "Ce qu’elle fait, quand l’utiliser"
+ },
+ "Written in the command, edit it there": {
+  "en": "Written in the command, edit it there",
+  "fr_reference": "Écrit dans la commande, modifiez-le là"
+ },
+ "Your edits to this command will be lost.": {
+  "en": "Your edits to this command will be lost.",
+  "fr_reference": "Vos modifications de cette commande seront perdues."
+ },
+ "^[%lld character](inflect: true)": {
+  "en": "^[%lld character](inflect: true)",
+  "fr_reference": "^[%lld caractère](inflect: true)"
+ },
+ "^[%lld command](inflect: true)": {
+  "en": "^[%lld command](inflect: true)",
+  "fr_reference": "^[%lld commande](inflect: true)"
+ },
+ "^[%lld login](inflect: true)": {
+  "en": "^[%lld login](inflect: true)",
+  "fr_reference": "^[%lld identifiant](inflect: true)"
+ },
+ "^[%lld tool](inflect: true)": {
+  "en": "^[%lld tool](inflect: true)",
+  "fr_reference": "^[%lld outil](inflect: true)"
+ }
+}

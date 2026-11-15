@@ -118,6 +118,9 @@ struct UtilsView: View {
         .navigationTitle("Utilities")
         .toast(toaster)
         .task {
+            #if DEBUG
+            if ScreenshotMode.isActive, inputs.isEmpty { inputs[.json] = ScreenshotMode.utilityInput }
+            #endif
             if case .utility(let requested) = pendingRequest {
                 tool = requested
                 pendingRequest = nil

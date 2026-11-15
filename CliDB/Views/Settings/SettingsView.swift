@@ -24,9 +24,25 @@ struct AppLanguage: Identifiable, Hashable {
     static let all: [AppLanguage] = [
         AppLanguage(code: nil, nativeName: String(localized: "System")),
         AppLanguage(code: "en", nativeName: "English"),
-        AppLanguage(code: "fr", nativeName: "Français"),
         AppLanguage(code: "es", nativeName: "Español"),
+        AppLanguage(code: "fr", nativeName: "Français"),
+        AppLanguage(code: "de", nativeName: "Deutsch"),
+        AppLanguage(code: "pt-BR", nativeName: "Português (Brasil)"),
+        AppLanguage(code: "it", nativeName: "Italiano"),
+        AppLanguage(code: "nl", nativeName: "Nederlands"),
+        AppLanguage(code: "pl", nativeName: "Polski"),
+        AppLanguage(code: "tr", nativeName: "Türkçe"),
+        AppLanguage(code: "ru", nativeName: "Русский"),
+        AppLanguage(code: "uk", nativeName: "Українська"),
         AppLanguage(code: "ar", nativeName: "العربية"),
+        AppLanguage(code: "he", nativeName: "עברית"),
+        AppLanguage(code: "hi", nativeName: "हिन्दी"),
+        AppLanguage(code: "id", nativeName: "Bahasa Indonesia"),
+        AppLanguage(code: "vi", nativeName: "Tiếng Việt"),
+        AppLanguage(code: "ja", nativeName: "日本語"),
+        AppLanguage(code: "ko", nativeName: "한국어"),
+        AppLanguage(code: "zh-Hans", nativeName: "简体中文"),
+        AppLanguage(code: "zh-Hant", nativeName: "繁體中文"),
     ]
 
     /// The name in the current app language, shown under the native name.

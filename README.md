@@ -39,6 +39,16 @@ xcodebuild -project CliDB.xcodeproj -scheme CliDB -configuration Debug build
 xcodebuild -project CliDB.xcodeproj -scheme CliDB test
 ```
 
+### Building the installer
+
+```bash
+Scripts/make-installer.sh
+```
+
+This builds the Release configuration and writes `build/Pocketknife-<version>.pkg`. Opening the package runs the macOS Installer, which puts Pocketknife straight into `/Applications` (replacing an older copy if there is one). There is nothing to drag.
+
+The package is not signed with a Developer ID, so the first time you open it macOS blocks it: right-click the package and choose **Open**, or allow it under **System Settings → Privacy & Security → Open Anyway**.
+
 The first time you open **CLI Commands** with an empty library, the app adds a few sample commands to show how templates work.
 
 ---
@@ -59,7 +69,7 @@ Open it from the gear at the bottom of the rail, or with **⌘,**.
 - **Mode**: System, Light or Dark.
 - **Theme**: six palettes designed to be easy on the eyes: *Slate* (default), *Forest*, *Ocean*, *Dusk*, *Paper* (warm, low blue light) and *Graphite*. The whole app recolors instantly.
 - **Animations**: turn motion off entirely.
-- **Language**: System, English, Français, Español or العربية (with a right-to-left layout). Pocketknife offers to restart to apply it. Code and commands always read left to right.
+- **Language**: System or one of 20 languages, including English, Español, Français, Deutsch, 日本語, 简体中文 and العربية (Arabic and Hebrew use a right-to-left layout). Pocketknife offers to restart to apply it. Code and commands always read left to right.
 - **About**: version, and links to the [GitHub repository](https://github.com/ABDOGH98/Pocketknife) and its issue tracker.
 
 Palettes live in `Views/Design/Theme.swift` (`Palette`). Translations live in `CliDB/Localizable.xcstrings`.
@@ -237,4 +247,4 @@ Run them with **⌘U** in Xcode or `xcodebuild … test` (see [Getting started](
 
 - Bundle ID: `com.miy33t.CliDB`
 - The app was renamed from CliDB to **Pocketknife**. The Xcode project, target, scheme, source folders and bundle ID keep the old name on purpose: the bundle ID locates the Keychain items and the SwiftData store, so changing it would orphan existing data.
-- Version: 1.0.0
+- Version: 1.1.0

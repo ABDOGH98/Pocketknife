@@ -9,6 +9,12 @@ struct PocketknifeApp: App {
 
     init() {
         do {
+            #if DEBUG
+            if ScreenshotMode.isActive {
+                container = try ScreenshotMode.makeContainer()
+                return
+            }
+            #endif
             container = try ModelContainer(for: SavedCommand.self, SavedPassword.self)
         } catch {
             fatalError("Couldn't open the command database: \(error)")

@@ -9,7 +9,11 @@ struct ContentView: View {
     @State private var pendingRequest: SectionRequest?
 
     init(initialSection: AppSection? = nil) {
+        #if DEBUG
+        _section = State(initialValue: ScreenshotMode.isActive ? ScreenshotMode.initialSection : initialSection)
+        #else
         _section = State(initialValue: initialSection)
+        #endif
     }
 
     var body: some View {
@@ -45,7 +49,12 @@ struct ContentView: View {
         .foregroundStyle(Theme.text)
         .background(Theme.canvas.ignoresSafeArea())
         .focusedSceneValue(\.sectionNavigation, SectionNavigation(current: section, go: go))
-        .onAppear { AppSettings.shared.applyAppearance() }
+        .onAppear {
+            AppSettings.shared.applyAppearance()
+            #if DEBUG
+            ScreenshotMode.captureWhenReady()
+            #endif
+        }
     }
 
     private func go(_ destination: AppSection?) {

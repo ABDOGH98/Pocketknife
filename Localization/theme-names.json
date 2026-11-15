@@ -1,0 +1,138 @@
+{
+ "es": [
+  "Pizarra",
+  "Bosque",
+  "Océano",
+  "Atardecer",
+  "Papel",
+  "Grafito"
+ ],
+ "fr": [
+  "Ardoise",
+  "Forêt",
+  "Océan",
+  "Crépuscule",
+  "Papier",
+  "Graphite"
+ ],
+ "de": [
+  "Schiefer",
+  "Wald",
+  "Ozean",
+  "Dämmerung",
+  "Papier",
+  "Graphit"
+ ],
+ "pt-BR": [
+  "Ardósia",
+  "Floresta",
+  "Oceano",
+  "Crepúsculo",
+  "Papel",
+  "Grafite"
+ ],
+ "it": [
+  "Ardesia",
+  "Foresta",
+  "Oceano",
+  "Crepuscolo",
+  "Carta",
+  "Grafite"
+ ],
+ "nl": [
+  "Leisteen",
+  "Bos",
+  "Oceaan",
+  "Schemering",
+  "Papier",
+  "Grafiet"
+ ],
+ "pl": [
+  "Łupek",
+  "Las",
+  "Ocean",
+  "Zmierzch",
+  "Papier",
+  "Grafit"
+ ],
+ "tr": [
+  "Arduvaz",
+  "Orman",
+  "Okyanus",
+  "Alacakaranlık",
+  "Kâğıt",
+  "Grafit"
+ ],
+ "ru": [
+  "Сланец",
+  "Лес",
+  "Океан",
+  "Сумерки",
+  "Бумага",
+  "Графит"
+ ],
+ "he": [
+  "צפחה",
+  "יער",
+  "אוקיינוס",
+  "דמדומים",
+  "נייר",
+  "גרפיט"
+ ],
+ "hi": [
+  "स्लेट",
+  "वन",
+  "सागर",
+  "सांझ",
+  "काग़ज़",
+  "ग्रेफ़ाइट"
+ ],
+ "id": [
+  "Batu Tulis",
+  "Hutan",
+  "Samudra",
+  "Senja",
+  "Kertas",
+  "Grafit"
+ ],
+ "vi": [
+  "Đá phiến",
+  "Rừng",
+  "Đại dương",
+  "Hoàng hôn",
+  "Giấy",
+  "Than chì"
+ ],
+ "ja": [
+  "スレート",
+  "フォレスト",
+  "オーシャン",
+  "夕暮れ",
+  "ペーパー",
+  "グラファイト"
+ ],
+ "ko": [
+  "슬레이트",
+  "숲",
+  "바다",
+  "황혼",
+  "종이",
+  "흑연"
+ ],
+ "zh-Hans": [
+  "石板",
+  "森林",
+  "海洋",
+  "黄昏",
+  "纸张",
+  "石墨"
+ ],
+ "zh-Hant": [
+  "石板",
+  "森林",
+  "海洋",
+  "黃昏",
+  "紙張",
+  "石墨"
+ ]
+}
